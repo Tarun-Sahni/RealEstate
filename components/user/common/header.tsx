@@ -45,9 +45,9 @@ const Header = () => {
                             className={`px-4 py-1.5 transition-all tracking-widest text-sm hover:bg-yellow-500 hover:dark:text-black rounded-full ${scrolled ? "text-black dark:text-white" : "text-white"}`}>
                             Home
                         </Link>
-                        <Link href="/"
+                        <Link href="/about"
                             className={`px-4 py-1.5 transition-all tracking-widest text-sm hover:bg-yellow-500 hover:dark:text-black rounded-full ${scrolled ? "text-black dark:text-white" : "text-white"}`}>
-                            Home
+                            About
                         </Link>
                         <Link href="/"
                             className={`px-4 py-1.5 transition-all tracking-widest text-sm hover:bg-yellow-500 hover:dark:text-black rounded-full ${scrolled ? "text-black dark:text-white" : "text-white"}`}>
