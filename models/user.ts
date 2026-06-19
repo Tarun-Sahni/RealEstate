@@ -47,6 +47,9 @@ const UserSchema = new Schema({
         type: Date,
         default: null,
         select: false,
+    }, isActive: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true }
 );
