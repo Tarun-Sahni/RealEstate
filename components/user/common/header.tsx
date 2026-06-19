@@ -36,13 +36,13 @@ const Header = () => {
                         <Link href="/" className='text-white px-4 py-1.5 transition-all tracking-widest text-sm hover:bg-gray-500/50 rounded-full'>Careers</Link>
                     </nav>
                 )}
-                <div className='flex flex-row justify-center items-center gap-2'>
-                    <Link href="/login" className='flex justify-center items-center gap-2 hover:bg-yellow-500 rounded-full px-4 py-1.5'>
-                        <User color='white' size="16" />
-                        <p className='hidden lg:block text-white tracking-widest font-inter text-sm'>Login</p>
+                <div className='flex flex-row justify-center items-center gap-1'>
+                    <Link href="/login" className='flex justify-center items-center gap-2 bg-yellow-500 hover:bg-yellow-500/80 rounded-full px-6 py-2'>
+                        <User color='#000' size="16" />
+                        <p className='hidden lg:block text-black tracking-widest font-inter text-sm'>Login</p>
                     </Link>
                     <Button variant="link" onClick={() => setMobileNav(true)} className='block lg:hidden'>
-                        <Menu size={16} />
+                        <Menu size={16} color='white' />
                     </Button>
                 </div>
             </header>

@@ -6,8 +6,8 @@ import { FaFacebook, FaInstagram, FaWhatsapp, FaYoutube } from 'react-icons/fa6'
 
 const Footer = () => {
   return (
-    <footer className='w-full bg-slate-200 dark:bg-neutral-900 px-4'>
-      <div className='max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 items-stretch pt-16 pb-8 gap-8'>
+    <footer className='w-full bg-slate-200 dark:bg-muted px-4'>
+      <div className='max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 items-stretch pt-16 pb-8 gap-8'>
         <div className='flex flex-col gap-8'>
           <div className='max-w-sm'>
             <Logo width={100} height={100} />
