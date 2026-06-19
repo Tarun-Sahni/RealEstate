@@ -1,26 +1,23 @@
-import { Geist, Geist_Mono } from "next/font/google"
-
-import "./globals.css"
+import { Playfair, Inter } from "next/font/google"
+import "@/app/globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'})
-
-const fontMono = Geist_Mono({
+const playfair = Playfair({
   subsets: ["latin"],
-  variable: "--font-mono",
+  variable: "--font-playfair",
+})
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
 })
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout({children}: Readonly<{children: React.ReactNode}>) {
   return (
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontMono.variable, "font-sans", geist.variable)}
+      className={cn("antialiased", playfair.variable, "font-sans", inter.variable)}
     >
       <body>
         <ThemeProvider>{children}</ThemeProvider>
