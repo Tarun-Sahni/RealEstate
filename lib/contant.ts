@@ -1,3 +1,6 @@
 export const BRAND_NAME="Gurgaon Elite Estate"
 export const TELEPHONE="+91-99999999999"
 export const MAIL="support@estate.com"
+export const OFFICE_WEEK_DAYS="Mon-Fri"
+export const OFFICE_START_TIIME="9:00AM"
+export const OFFICE_CLOSING_TIME="6:00PM"

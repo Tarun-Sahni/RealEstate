@@ -1,7 +1,7 @@
 "use client"
 import { Button } from '@/components/ui/button'
 import Logo from './logo'
-import { Menu, User, X } from 'lucide-react'
+import { BriefcaseBusiness, House, Info, Mail, Menu, School, User, X } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import axios, { AxiosError } from 'axios'
@@ -124,24 +124,29 @@ const Header = () => {
                 ) : (
                     <nav className='hidden lg:flex flex-row justify-between items-center gap-1'>
                         <Link href="/"
-                            className={`px-4 py-1.5 transition-all tracking-widest text-sm hover:bg-yellow-500 hover:dark:text-black rounded-full ${scrolled ? "text-black dark:text-white" : "text-white"}`}>
+                            className={`flex flex-row justify-center items-center gap-2 px-4 py-1.5 transition-all tracking-widest text-sm hover:bg-yellow-500 hover:dark:text-black rounded-full ${scrolled ? "text-black dark:text-white" : "text-black"}`}>
+                            <House size={16}/>
                             Home
                         </Link>
-                        <Link href="/about"
-                            className={`px-4 py-1.5 transition-all tracking-widest text-sm hover:bg-yellow-500 hover:dark:text-black rounded-full ${scrolled ? "text-black dark:text-white" : "text-white"}`}>
-                            About
+                        <Link href="/properties"
+                            className={`flex flex-row justify-center items-center gap-2 px-4 py-1.5 transition-all tracking-widest text-sm hover:bg-yellow-500 hover:dark:text-black rounded-full ${scrolled ? "text-black dark:text-white" : "text-black"}`}>
+                            <School size={16}/>
+                            Properties
                         </Link>
-                        <Link href="/"
-                            className={`px-4 py-1.5 transition-all tracking-widest text-sm hover:bg-yellow-500 hover:dark:text-black rounded-full ${scrolled ? "text-black dark:text-white" : "text-white"}`}>
-                            Home
+                        <Link href="/aboutus"
+                            className={`flex flex-row justify-center items-center gap-2 px-4 py-1.5 transition-all tracking-widest text-sm hover:bg-yellow-500 hover:dark:text-black rounded-full ${scrolled ? "text-black dark:text-white" : "text-black"}`}>
+                            <Info size={16}/>
+                            About Us
                         </Link>
-                        <Link href="/"
-                            className={`px-4 py-1.5 transition-all tracking-widest text-sm hover:bg-yellow-500 hover:dark:text-black rounded-full ${scrolled ? "text-black dark:text-white" : "text-white"}`}>
-                            Home
+                        <Link href="/contactus"
+                            className={`flex flex-row justify-center items-center gap-2 px-4 py-1.5 transition-all tracking-widest text-sm hover:bg-yellow-500 hover:dark:text-black rounded-full ${scrolled ? "text-black dark:text-white" : "text-black"}`}>
+                            <Mail size={16}/>
+                            Contact Us
                         </Link>
-                        <Link href="/"
-                            className={`px-4 py-1.5 transition-all tracking-widest text-sm hover:bg-yellow-500 hover:dark:text-black rounded-full ${scrolled ? "text-black dark:text-white" : "text-white"}`}>
-                            Home
+                        <Link href="/career"
+                            className={`flex flex-row justify-center items-center gap-2 px-4 py-1.5 transition-all tracking-widest text-sm hover:bg-yellow-500 hover:dark:text-black rounded-full ${scrolled ? "text-black dark:text-white" : "text-black"}`}>
+                            <BriefcaseBusiness size={16}/>
+                            Career
                         </Link>
                     </nav>
                 )}
