@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { MailCheck } from "lucide-react";
+import { ArrowLeft, MailCheck } from "lucide-react";
 import Link from "next/link";
 
 const VerifyAccount = () => {
@@ -22,21 +22,22 @@ const VerifyAccount = () => {
 
                 {/* Message */}
                 <p className="mt-3 text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    We’ve sent a verification link to your email address.
+                    We've sent a verification link to your email address.
                     Please check your inbox and click the link to activate your account.
                 </p>
 
                 {/* Hint */}
                 <p className="mt-4 text-xs text-gray-500">
-                    Didn’t receive the email? Check your spam folder or try again.
+                    Didn't receive the email? Check your spam folder or try again.
                 </p>
 
                 {/* Actions */}
-                <div className="mt-6 flex flex-col gap-3">
+               <div className="mt-6 flex flex-col gap-3">
                     <Link
-                        href="/login"
-                        className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-medium py-2 rounded-lg transition">
-                        Go to Login
+                        href="/"
+                        className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-medium py-2 rounded-lg transition flex flex-row justify-center items-center gap-2">
+                            <ArrowLeft size={18} strokeWidth={3}/>
+                        Back to Home
                     </Link>
                 </div>
             </div>

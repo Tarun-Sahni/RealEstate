@@ -15,14 +15,10 @@ import {
     DropdownMenuGroup,
     DropdownMenuItem,
     DropdownMenuLabel,
-    DropdownMenuPortal,
     DropdownMenuSeparator,
-    DropdownMenuShortcut,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { toast } from 'sonner'
 
 const Header = () => {
     const router = useRouter();
@@ -78,6 +74,27 @@ const Header = () => {
         }
         fetchUser();
     }, [setAuth])
+
+    const logOut = async () => {
+        try {
+            const response = await axios.post("/api/user/auth/logout", { withCredentials: true })
+            if (response.data.success) {
+                setUser({
+                    userId: "",
+                    username: "",
+                    email: "",
+                    avatar: "",
+                    role: "",
+                });
+                toast.success(response.data.message);
+                router.refresh();
+            }
+        } catch (error) {
+            const err = error as AxiosError<any>;
+            const message = err.response?.data?.message || err.message || "Something went wrong";
+            toast.error(message);
+        }
+    }
     return (
         <div className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${scrolled
             ? "bg-white dark:bg-black shadow-md"
@@ -127,14 +144,14 @@ const Header = () => {
                         </Link>
                     </nav>
                 )}
-                <div className='flex flex-row justify-center items-center gap-1'>
+                <div className='flex flex-row justify-center items-center gap-0'>
                     {
                         loading ? (
                             <Skeleton className='h-10 w-24 rounded-full' />
                         ) : (user && user?.role === "USER" ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button className='flex flex-row gap-2 items-center justify-end cursor-pointer' variant="link">
+                                    <Button className='flex flex-row gap-2 items-center justify-end cursor-pointer' variant="ghost">
                                         <Avatar>
                                             <AvatarImage
                                                 src={user?.avatar}
@@ -145,58 +162,26 @@ const Header = () => {
                                         <p className={`${scrolled ? "text-black dark:text-white" : "text-white"} capitalize tracking-wider`}>{user?.username}</p>
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className="w-40" align="end">
+                                <DropdownMenuContent className="w-40" align="center">
                                     <DropdownMenuGroup>
                                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
                                         <DropdownMenuItem>
                                             Profile
-                                            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            Billing
-                                            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem>
                                             Settings
-                                            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
                                         </DropdownMenuItem>
                                     </DropdownMenuGroup>
                                     <DropdownMenuSeparator />
                                     <DropdownMenuGroup>
-                                        <DropdownMenuItem>Team</DropdownMenuItem>
-                                        <DropdownMenuSub>
-                                            <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
-                                            <DropdownMenuPortal>
-                                                <DropdownMenuSubContent>
-                                                    <DropdownMenuItem>Email</DropdownMenuItem>
-                                                    <DropdownMenuItem>Message</DropdownMenuItem>
-                                                    <DropdownMenuSeparator />
-                                                    <DropdownMenuItem>More...</DropdownMenuItem>
-                                                </DropdownMenuSubContent>
-                                            </DropdownMenuPortal>
-                                        </DropdownMenuSub>
-                                        <DropdownMenuItem>
-                                            New Team
-                                            <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuGroup>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuGroup>
-                                        <DropdownMenuItem>GitHub</DropdownMenuItem>
-                                        <DropdownMenuItem>Support</DropdownMenuItem>
-                                        <DropdownMenuItem disabled>API</DropdownMenuItem>
-                                    </DropdownMenuGroup>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuGroup>
-                                        <DropdownMenuItem>
+                                        <DropdownMenuItem onClick={() => logOut()}>
                                             Log out
-                                            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                                         </DropdownMenuItem>
                                     </DropdownMenuGroup>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         ) : (
-                            <Link href="/login" className='flex justify-center items-center gap-2 bg-yellow-500 hover:bg-yellow-500/80 rounded-full px-6 py-2'>
+                            <Link href="/login" className='flex justify-center items-center gap-2 hover:bg-yellow-500 transition-all rounded-full px-6 py-2'>
                                 <User color='#fff' size="16" />
                                 <p className='hidden lg:block text-white tracking-widest font-inter text-sm'>Login</p>
                             </Link>

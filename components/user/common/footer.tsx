@@ -137,13 +137,13 @@ const Footer = () => {
       </div>
       {/* copyright */}
       <div className='max-w-6xl mx-auto justify-between items-center border-t border-t-gray-500/50 py-8 flex flex-col md:flex-row gap-1'>
-        <p className='text-sm flex gap-1 text-wrap text-center md:text-left mx-auto md:m-0 tracking-wider text-white'>&copy;{new Date().getFullYear()} <span className='text-yellow-500'>Gurgaon Elite Estate</span> - All Rights Reserved</p>
-        <div className='flex justify-center items-center gap-1'>
-          <Link href="/" className='text-xs tracking-widest capitalize cursor-pointer hover:bg-gray-300 hover:dark:bg-black px-3 py-1 rounded-full text-white hover:text-black dark:text-white'>Privacy</Link>
+        <p className='text-xs md:text-sm flex gap-1 text-wrap text-center md:text-left mx-auto md:m-0 tracking-wider text-white'>&copy;{new Date().getFullYear()} <span className='text-yellow-500'>Gurgaon Elite Estate</span> - All Rights Reserved</p>
+        <div className='flex justify-center items-center gap-0'>
+          <Link href="/" className='text-xs md:text-sm tracking-widest capitalize cursor-pointer hover:bg-gray-300 hover:dark:bg-black px-3 py-1 rounded-full text-white hover:text-black dark:text-white'>Privacy</Link>
           <Dot color='#eab308' />
-          <Link href="/" className='text-xs tracking-widest capitalize cursor-pointer hover:bg-gray-300 hover:dark:bg-black px-3 py-1 rounded-full text-white hover:text-black dark:text-white'>Terms</Link>
+          <Link href="/" className='text-xs md:text-sm tracking-widest capitalize cursor-pointer hover:bg-gray-300 hover:dark:bg-black px-3 py-1 rounded-full text-white hover:text-black dark:text-white'>Terms</Link>
           <Dot color='#eab308' />
-          <Link href="/" className='text-xs tracking-widest capitalize cursor-pointer hover:bg-gray-300 hover:dark:bg-black px-3 py-1 rounded-full text-white hover:text-black dark:text-white'>Sitemap</Link>
+          <Link href="/" className='text-xs md:text-sm tracking-widest capitalize cursor-pointer hover:bg-gray-300 hover:dark:bg-black px-3 py-1 rounded-full text-white hover:text-black dark:text-white'>Sitemap</Link>
         </div>
       </div>
     </footer>

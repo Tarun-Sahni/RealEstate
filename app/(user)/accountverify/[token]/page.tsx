@@ -14,7 +14,7 @@ const VerifyPage = () => {
     const verifyAccount = async () => {
       try {
         setStatus("loading");
-        const response = await axios.get(`/api/user/auth/verify/${token}`);
+        const response = await axios.get(`/api/user/auth/accountverify/${token}`);
         if (response?.data?.success) {
           setStatus("success");
           setTimeout(() => {
@@ -72,7 +72,7 @@ const VerifyPage = () => {
             </p>
 
             <button
-              onClick={() => router.push("/verify")}
+              onClick={() => router.push("/accountverify")}
               className="mt-4 px-4 py-2 bg-yellow-500 text-black rounded-lg"
             >
               Try Again
