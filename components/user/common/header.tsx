@@ -19,6 +19,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { toast } from 'sonner'
+import { ThemeToggle } from '../../theme/themetoggle'
 
 const Header = () => {
     const router = useRouter();
@@ -144,20 +145,21 @@ const Header = () => {
                         </Link>
                     </nav>
                 )}
-                <div className='flex flex-row justify-center items-center gap-0'>
+                <div className='flex flex-row justify-center items-center gap-1'>
+                    <ThemeToggle/>
                     {
                         loading ? (
                             <Skeleton className='h-10 w-24 rounded-full' />
                         ) : (user && user?.role === "USER" ? (
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button className='flex flex-row gap-2 items-center justify-end cursor-pointer' variant="ghost">
+                                    <Button className='flex flex-row gap-2 items-center justify-end cursor-pointer hover:bg-transparent dark:hover:bg-transparent' variant="ghost">
                                         <Avatar>
                                             <AvatarImage
                                                 src={user?.avatar}
                                                 alt={user?.username}
                                             />
-                                            <AvatarFallback className='uppercase'>{user?.username[0]}</AvatarFallback>
+                                            <AvatarFallback className='uppercase font-bold text-lg text-yellow-500 shadow-xl'>{user?.username[0]}</AvatarFallback>
                                         </Avatar>
                                         <p className={`${scrolled ? "text-black dark:text-white" : "text-white"} capitalize tracking-wider`}>{user?.username}</p>
                                     </Button>
@@ -165,7 +167,7 @@ const Header = () => {
                                 <DropdownMenuContent className="w-40" align="center">
                                     <DropdownMenuGroup>
                                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                                        <DropdownMenuItem>
+                                        <DropdownMenuItem onClick={()=>router.push("/profile")}>
                                             Profile
                                         </DropdownMenuItem>
                                         <DropdownMenuItem>
@@ -187,7 +189,6 @@ const Header = () => {
                             </Link>
                         ))
                     }
-
                     <Button variant="link" onClick={() => setMobileNav(true)} className='block lg:hidden'>
                         <Menu size={16} color='white' />
                     </Button>

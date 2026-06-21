@@ -1,7 +1,9 @@
 
 const About = () => {
     return (
-        <div></div>
+         <div className="min-h-screen mt-18 container mx-auto border">
+            
+         </div>
     );
 };
 

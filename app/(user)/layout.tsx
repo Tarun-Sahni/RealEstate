@@ -1,8 +1,8 @@
 import { Playfair, Inter } from "next/font/google"
 import "@/app/globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/theme/themeprovider";
 
 const playfair = Playfair({
   subsets: ["latin"],

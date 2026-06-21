@@ -1,8 +1,8 @@
 import { Playfair, Inter } from "next/font/google"
 import "@/app/globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/theme/themeprovider";
 
 const playfair = Playfair({
   subsets: ["latin"],
@@ -13,7 +13,7 @@ const inter = Inter({
   variable: "--font-inter",
 })
 
-export default function RootLayout({children}: Readonly<{children: React.ReactNode}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
@@ -21,7 +21,13 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
       className={cn("antialiased", playfair.variable, "font-sans", inter.variable)}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange>
+          {children}
+        </ThemeProvider>
         <Toaster />
       </body>
     </html>
