@@ -1,15 +1,62 @@
+"use client"
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { MAIL, OFFICE_CLOSING_TIME, OFFICE_START_TIIME, OFFICE_WEEK_DAYS, TELEPHONE } from '@/lib/contant'
-import { BadgeCheckIcon, CalendarDays, Clock8, Mail, MapPinHouse, MessageCircle, Phone } from 'lucide-react'
-import React from 'react'
+import axios, { AxiosError } from 'axios'
+import { BadgeCheckIcon, CalendarDays, Clock8, Loader2, Mail, MapPinHouse, MessageCircle, Phone } from 'lucide-react'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 const ContactUs = () => {
+  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    phone: "",
+    message: ""
+  })
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      if (isNaN(Number(form.phone)) || form.phone.length !== 10) {
+        toast.error("Invalid Number")
+      }
+      const response = await axios.post("/api/user/contactus",form)
+      if (response?.data?.success) {
+        toast.success(response?.data?.message)
+      }
+
+    } catch (error) {
+      const err = error as AxiosError<any>;
+      const message = err.response?.data?.message || err.message || "Something went wrong";
+      toast.error(message);
+    } finally {
+      setLoading(false);
+      setForm({
+        firstname: "",
+        lastname: "",
+        email: "",
+        phone: "",
+        message: ""
+      })
+    }
+  }
   return (
-    <main className="min-h-screen mt-18 max-w-7xl mx-auto py-8 flex flex-row justify-between">
-      <aside className='h-full border w-1/3 flex flex-col gap-6 p-4 rounded-2xl shadow-xl'>
+    <main className="min-h-screen mt-18 max-w-7xl mx-auto py-8 flex flex-col lg:flex-row justify-between px-4">
+      <aside className='h-full border lg:w-1/3 flex flex-col gap-6 p-4 rounded-2xl shadow-xl'>
         <Badge variant="default">Contact Us</Badge>
         <h1 className='text-2xl md:text-4xl font-playfair'>Let's find your next home together.</h1>
         <p className='tracking-wider'>Whether you're buying, selling or just exploring the market, our team is ready to guide you with expert advice and personlized support.</p>
@@ -46,17 +93,20 @@ const ContactUs = () => {
           <Clock8 />
         </div>
       </aside>
-      <section className='w-3/5 flex flex-col justify-between'>
+      <section className='lg:w-3/5 pt-8 lg:pt-0 flex flex-col justify-between p-4'>
         <div className='w-full h-full space-y-8'>
           <div className='flex flex-col gap-4'>
             <h2 className='text-3xl font-playfair'>Send us a message</h2>
             <p className='text-sm tracking-wider'>Tell us what you're looking for and we'll get back to you shortly.</p>
           </div>
-          <form className='flex flex-col gap-6'>
-            <div className='flex flex-row gap-4'>
+          <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
+            <div className='flex flex-col md:flex-row gap-4'>
               <div className='flex flex-col gap-3 w-full'>
                 <Label>First Name</Label>
                 <Input
+                  name="firstname"
+                  value={form.firstname}
+                  onChange={handleChange}
                   placeholder='First Name'
                   className='py-5 rounded'
                 />
@@ -64,6 +114,9 @@ const ContactUs = () => {
               <div className='flex flex-col gap-3 w-full'>
                 <Label>Last Name</Label>
                 <Input
+                  name="lastname"
+                  value={form.lastname}
+                  onChange={handleChange}
                   placeholder='Last Name'
                   className='py-5 rounded'
                 />
@@ -72,6 +125,9 @@ const ContactUs = () => {
             <div className='flex flex-col gap-3 w-full'>
               <Label>Email</Label>
               <Input
+                name="email"
+                value={form.email}
+                onChange={handleChange}
                 placeholder='Email'
                 className='py-5 rounded'
               />
@@ -79,6 +135,9 @@ const ContactUs = () => {
             <div className='flex flex-col gap-3 w-full'>
               <Label>Phone Number</Label>
               <Input
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
                 placeholder='Phone Number'
                 className='py-5 rounded'
               />
@@ -86,14 +145,20 @@ const ContactUs = () => {
             <div className='flex flex-col gap-3 w-full'>
               <Label>How can we help?</Label>
               <Textarea
-              rows={6}
-                placeholder='Phone Number'
-                className='py-5 rounded'
+                name="message"
+                value={form.message}
+                onChange={handleChange}
+                rows={6}
+                placeholder='How can we help you?'
+                className='py-5 rounded min-h-40'
               />
             </div>
+            <Button className='w-fit rounded-full py-2 px-5 tracking-wider cursor-pointer ml-auto' disabled={loading}>
+              {loading ? <><Loader2 className='animate-spin' /> Submitting...</> : "Submit"}
+            </Button>
           </form>
         </div>
-        <div className='w-full flex flex-row justify-between items-stretch gap-4'>
+        <div className='w-full flex flex-col md:flex-row justify-between items-stretch gap-4'>
           <div className='border rounded-2xl shadow-xl flex flex-col w-full p-4 gap-4'>
             <h2 className='font-playfair text-2xl'>Why Choose Us</h2>
             <div className='p-4 shadow-md rounded-xl flex flex-row items-center justify-start gap-2 tracking-wider text-sm'>
