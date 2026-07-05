@@ -37,11 +37,7 @@ export const NAVLINKS = [
     {
         name: "Properties",
         href: "/",
-    },
-    {
-        name: "Testimonials",
-        href: "/",
-    },
+    }
 ]
 
 const Header = () => {
