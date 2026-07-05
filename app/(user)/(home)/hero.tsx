@@ -6,13 +6,13 @@ import Image from "next/image"
 const HeroSection = () => {
   return (
     <section className="relative w-full h-screen md:h-[90vh] flex flex-col gap-16">
-      <div className="w-full h-full flex flex-col justify-center items-center relative">
+      <div className="w-full h-full flex flex-col justify-center items-center relative group overflow-hidden">
         <Image
           src="/hero.png"
           alt="Hero Image"
           fill
           priority
-          className="object-cover absolute top-0 left-0 right-0 bottom-0"
+          className="object-cover absolute top-0 left-0 right-0 bottom-0 group-hover:scale-120 transition-transform duration-20000 ease-linear"
         />
         <div className="w-full h-full bg-black/40 absolute top-0 left-0 right-0 bottom-0 z-10"></div>
         <div className="flex flex-col gap-4 z-20 items-center px-4">
@@ -21,8 +21,8 @@ const HeroSection = () => {
           <p className="max-w-sm font-inter text-white text-center tracking-widest text-sm md:text-base leading-relaxed">Explore our curated selection of exquisite properties meticulously tailored to your unique dream home vision</p>
         </div>
       </div>
-      <div className="px-4 max-w-7xl w-full m-auto lg:absolute left-0 right-0 bottom-0 lg:translate-y-1/2 z-30">
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 p-8 lg:p-16 gap-4 bg-white dark:bg-black rounded-2xl shadow-2xl">
+      <div className="px-4 max-w-6xl w-full m-auto lg:absolute left-0 right-0 bottom-0 lg:translate-y-1/2 z-30">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 p-8 lg:p-12 gap-4 bg-white dark:bg-black rounded-2xl shadow-2xl">
           <div className="bg-muted dark:bg-muted rounded-full h-12 w-full flex flex-row items-center px-4 gap-2">
             <Input
               placeholder="Property Type"
