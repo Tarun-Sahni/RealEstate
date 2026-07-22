@@ -5,7 +5,7 @@ import { Menu, User, X } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import axios, { AxiosError } from 'axios'
-import { useAuth } from '@/app/(user)/store/authStore'
+import { useAuth } from '@/store/authStore'
 import { useRouter } from 'next/navigation'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -135,8 +135,8 @@ const Header = () => {
                     </div>
                 ) : (
                     <nav className='hidden lg:flex flex-row justify-between items-center gap-1'>
-                        {NAVLINKS.map((link) => (
-                            <Button asChild variant="link" key={link.href}>
+                        {NAVLINKS.map((link,index) => (
+                            <Button key={index} asChild variant="link">
                                 <Link href={link.href}>
                                     {link.name}
                                 </Link>
