@@ -3,6 +3,7 @@ import "@/app/globals.css"
 import { cn } from "@/lib/utils";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme/themeprovider";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const playfair = Playfair({
   subsets: ["latin"],
@@ -26,7 +27,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange>
-          {children}
+          <TooltipProvider>
+            {children}
+          </TooltipProvider>
         </ThemeProvider>
         <Toaster />
       </body>

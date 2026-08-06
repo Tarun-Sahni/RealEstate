@@ -1,9 +1,6 @@
 import {User} from "@/models/user";
-import {ContactUs} from "@/models/contactus";
-import {Favorite} from "@/models/favorite";
-import {Inquiry}from "@/models/inquiry";
-import {VisitBooking} from "@/models/visitbooking"
-import {Property} from "@/models/property"
-import {Order} from "@/models/order";
+import {ContactUs} from "@/models/common/contactus";
+import {Category} from "@/models/property/category";
+import {SubCategory} from "@/models/property/subcategory";
 
-export {User,ContactUs,Favorite,Inquiry,VisitBooking,Property,Order};
+export {User,ContactUs,Category,SubCategory};

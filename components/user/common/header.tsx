@@ -144,7 +144,7 @@ const Header = () => {
                         ))}
                     </nav>
                 )}
-                <div className='flex flex-row justify-center items-center gap-0'>
+                <div className='flex flex-row justify-center items-center gap-2'>
                     <ThemeToggle />
                     {
                         loading ? (

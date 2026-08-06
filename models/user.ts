@@ -50,8 +50,21 @@ const UserSchema = new Schema({
     }, isActive: {
         type: Boolean,
         default: false
-    }
-}, { timestamps: true }
+    }, loginAttempts: {
+        type: Number,
+        default: 0,
+    }, lockOutExpires: {
+        type: Date,
+        default: null,
+    },
+}, {
+    minimize: true,
+    timestamps: true,
+    versionKey: false
+}
 );
+
+UserSchema.index({ verificationToken: 1 });
+UserSchema.index({ passwordResetToken: 1 });
 
 export const User = models.User || model("User", UserSchema);
