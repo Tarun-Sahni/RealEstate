@@ -9,7 +9,7 @@ export async function POST() {
 
     response.cookies.set("token", "", {
       httpOnly: true,
-      path: "/admin",
+      path: "/",
       expires: new Date(0),
     });
     return response;

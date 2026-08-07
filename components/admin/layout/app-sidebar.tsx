@@ -49,7 +49,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const handleLogout = async () => {
     try {
       setLoggingOut(true);
-      const response = await axios.post("/api/admin/auth/logout", {}, { withCredentials: true })
+      const response = await axios.post("/api/admin/logout", {}, { withCredentials: true })
       if (response?.data?.success) {
         toast.success(response?.data?.message)
         router.push("/admin/auth")

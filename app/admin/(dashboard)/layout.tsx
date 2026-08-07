@@ -17,7 +17,9 @@ export default function AdminLayout({ children }: Readonly<{ children: React.Rea
         <AppSidebar variant="inset" />
         <SidebarInset>
             <SiteHeader />
+            <main className="w-full h-full p-4">
             {children}
+            </main>
         </SidebarInset>
     </SidebarProvider>
 }

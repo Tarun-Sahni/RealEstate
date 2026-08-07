@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
         }, { status: 200 })
         response.cookies.set("token", token, {
             httpOnly: true,
-            path: "/admin",
+            path: "/",
             maxAge: 60 * 60 * 24,
         });
         return response;

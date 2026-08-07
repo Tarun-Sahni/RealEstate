@@ -34,10 +34,6 @@ const CategorySchema = new Schema(
             trim: true,
             maxlength: [160, "Meta description should stay under 160 characters for SEO"],
         },
-        order: {
-            type: Number,
-            default: 0,
-        },
         isActive: {
             type: Boolean,
             default: true,
@@ -46,27 +42,5 @@ const CategorySchema = new Schema(
     { timestamps: true }
 );
 
-// Case-insensitive uniqueness on name (e.g. "Villas" and "villas" collide) while
-// still allowing the display case to be preserved, unlike a forced-lowercase field.
-CategorySchema.index({ name: 1 }, { unique: true, collation: { locale: "en", strength: 2 } });
-CategorySchema.index({ isActive: 1, order: 1 });
-CategorySchema.index({ name: "text", description: "text" });
-
-CategorySchema.pre("validate", function () {
-    if (this.name && (!this.slug || this.isModified("name"))) {
-        this.slug = this.name
-            .toString()
-            .trim()
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "-")
-            .replace(/^-+|-+$/g, "");
-    }
-    if (!this.metaTitle && this.name) {
-        this.metaTitle = this.name;
-    }
-    if (!this.metaDescription && this.description) {
-        this.metaDescription = this.description.slice(0, 160);
-    }
-});
 
 export const Category = models.Category || model("Category", CategorySchema);
