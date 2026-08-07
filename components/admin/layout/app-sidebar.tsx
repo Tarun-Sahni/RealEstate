@@ -9,7 +9,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { NavMain } from "./nav-main"
-import { Home, LogOut, Loader2, LandPlot, Layers2, Layers } from "lucide-react"
+import { Home, LogOut, Loader2, LandPlot, Layers2, Layers, Users, ScrollText } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import axios, { AxiosError } from "axios"
@@ -23,6 +23,10 @@ const data = {
       title: "Dashboard",
       url: "/admin",
       icon: Home,
+    },{
+      title: "Users",
+      url: "/admin/users",
+      icon: Users,
     },
     {
       title: "Categoy",
@@ -38,6 +42,10 @@ const data = {
       title: "Property",
       url: "/admin/property",
       icon: LandPlot,
+    },{
+      title: "Inquiry",
+      url: "/admin/inquiry",
+      icon: ScrollText,
     },
   ],
 }
@@ -49,7 +57,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const handleLogout = async () => {
     try {
       setLoggingOut(true);
-      const response = await axios.post("/api/admin/logout", {}, { withCredentials: true })
+      const response = await axios.post("/api/admin/auth/logout", {}, { withCredentials: true })
       if (response?.data?.success) {
         toast.success(response?.data?.message)
         router.push("/admin/auth")

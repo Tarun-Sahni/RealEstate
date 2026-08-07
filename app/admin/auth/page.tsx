@@ -29,7 +29,7 @@ const AdminLogin = () => {
     e.preventDefault()
     try {
       setLoading(true);
-      const response = await axios.post("/api/admin/auth", form, { withCredentials: true })
+      const response = await axios.post("/api/admin/auth/login", form, { withCredentials: true })
       if (response?.data?.success) {
         toast.success(response?.data?.message)
         router.push("/admin")

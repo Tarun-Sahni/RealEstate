@@ -50,7 +50,7 @@ const DeleteSubCategory = ({ subcategoryid, onSuccess }: { subcategoryid: string
               <Loader2 className="animate-spin" />
               Deleting...
             </> :
-            "Continue"
+            "Delete"
           }
         </AlertDialogAction>
       </AlertDialogFooter>

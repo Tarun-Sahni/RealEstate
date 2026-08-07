@@ -10,22 +10,20 @@ import {
 } from "@/components/ui/alert-dialog"
 import axios, { AxiosError } from "axios"
 import { Loader2 } from "lucide-react"
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
 
-const DeleteCategory = ({ categoryid, onSuccess }: { categoryid: string; onSuccess?: () => void }) => {
-//   const closeRef = useRef<HTMLButtonElement>(null);
+const DeleteInquiry = ({ inquiryid, onSuccess }: { inquiryid: string; onSuccess?: () => void }) => {
   const [loading, setLoading] = useState(false);
 
   const handleDelete = async (e: React.MouseEvent) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const response = await axios.delete(`/api/admin/category/${categoryid}`, { withCredentials: true })
+      const response = await axios.delete(`/api/admin/inquiry/${inquiryid}`, { withCredentials: true })
       if (response?.data?.success) {
         toast.success(response?.data?.message)
         onSuccess?.()
-        // closeRef.current?.click()
       }
     } catch (error) {
       const err = error as AxiosError<{ message?: string }>;
@@ -41,7 +39,7 @@ const DeleteCategory = ({ categoryid, onSuccess }: { categoryid: string; onSucce
       <AlertDialogHeader>
         <AlertDialogTitle className="font-inter">Are you absolutely sure?</AlertDialogTitle>
         <AlertDialogDescription>
-          This action cannot be undone. This will permanently delete this category from the server.
+          This action cannot be undone. This will permanently delete this inquiry from the server.
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
@@ -55,10 +53,9 @@ const DeleteCategory = ({ categoryid, onSuccess }: { categoryid: string; onSucce
             "Delete"
           }
         </AlertDialogAction>
-        {/* <AlertDialogCancel ref={closeRef} className="hidden" /> */}
       </AlertDialogFooter>
     </AlertDialogContent>
   )
 }
 
-export default DeleteCategory
+export default DeleteInquiry

@@ -221,9 +221,9 @@ const AddSubCategory = ({ onSuccess }: { onSuccess?: () => void }) => {
                         {loading ?
                             <>
                                 <Loader2 className="animate-spin" />
-                                Saving...
+                                Adding...
                             </> :
-                            "Save changes"
+                            "Add"
                         }
                     </Button>
                     <DialogClose ref={closeRef} className="hidden" type="button" />

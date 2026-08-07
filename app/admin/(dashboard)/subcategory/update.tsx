@@ -253,9 +253,9 @@ const UpdateSubCategory = ({ subcategory, onSuccess }: { subcategory: SubCategor
                         {loading ?
                             <>
                                 <Loader2 className="animate-spin" />
-                                Saving...
+                                Editing...
                             </> :
-                            "Save changes"
+                            "Edit"
                         }
                     </Button>
                     <DialogClose ref={closeRef} className="hidden" type="button" />
