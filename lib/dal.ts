@@ -24,7 +24,7 @@ export const verifyAdminSession = cache(async () => {
         redirect("/");
     }
 
-    return { userId: user._id.toString(), role: user.role };
+    return { userId: user._id.toString(), username: user.username, role: user.role };
 });
 
 // For Route Handlers: reads the cookie off the request instead of next/headers,

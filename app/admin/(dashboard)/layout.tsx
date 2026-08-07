@@ -4,8 +4,11 @@ import {
     SidebarInset,
     SidebarProvider,
 } from "@/components/ui/sidebar"
+import { verifyAdminSession } from "@/lib/dal"
 
-export default function AdminLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function AdminLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+    const { username } = await verifyAdminSession();
+
     return <SidebarProvider
         style={
             {
@@ -16,7 +19,7 @@ export default function AdminLayout({ children }: Readonly<{ children: React.Rea
     >
         <AppSidebar variant="inset" />
         <SidebarInset>
-            <SiteHeader />
+            <SiteHeader username={username} />
             <main className="w-full h-full p-4">
             {children}
             </main>

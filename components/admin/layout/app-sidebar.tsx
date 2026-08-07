@@ -23,7 +23,7 @@ const data = {
       title: "Dashboard",
       url: "/admin",
       icon: Home,
-    },{
+    }, {
       title: "Users",
       url: "/admin/users",
       icon: Users,
@@ -42,7 +42,21 @@ const data = {
       title: "Property",
       url: "/admin/property",
       icon: LandPlot,
-    },{
+      items: [
+        {
+          title: "Listing Type",
+          url: "/admin/property/listingtype",
+        },
+        {
+          title: "Property Type",
+          url: "/admin/property/propertytype",
+        },
+        {
+          title: "Property Listing",
+          url: "/admin/property/propertylisting",
+        },
+      ],
+    }, {
       title: "Inquiry",
       url: "/admin/inquiry",
       icon: ScrollText,
@@ -81,7 +95,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
               <Link href="/admin" className="flex justify-center text-xl font-bold tracking-wider capitalize">
-              Gurgaon Real Estate
+                Gurgaon Real Estate
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -89,7 +103,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        {/* <NavDocuments items={data.documents} /> */}
       </SidebarContent>
       <SidebarFooter>
         <Button
