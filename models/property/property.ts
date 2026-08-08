@@ -60,10 +60,9 @@ const PropertySchema = new Schema(
             ref: "PropertyType",
             required: [true, "Property type is required"],
         },
-        status: {
+        propertyStatus: {
             type: String,
-            enum: ["New Launch", "Under Construction", "Ready to Move", "Resale"],
-            default: "Ready to Move",
+            trim:true
         },
 
         // Pricing
@@ -85,6 +84,7 @@ const PropertySchema = new Schema(
         bedrooms: { type: Number, min: 0 },
         bathrooms: { type: Number, min: 0 },
         balconies: { type: Number, min: 0 },
+        garages:{ type:Number,min:0},
         area: {
             value: { type: Number, min: 0 },
             unit: { type: String, enum: ["sqft", "sqm", "acre"], default: "sqft" },
@@ -102,7 +102,7 @@ const PropertySchema = new Schema(
 
         // Location
         address: {
-            line1: { type: String, trim: true },
+            address: { type: String, trim: true },
             landmark: { type: String, trim: true },
             city: { type: String, trim: true, required: [true, "City is required"] },
             state: { type: String, trim: true, required: [true, "State is required"] },

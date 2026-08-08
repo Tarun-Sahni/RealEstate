@@ -20,7 +20,7 @@ export default async function AdminLayout({ children }: Readonly<{ children: Rea
         <AppSidebar variant="inset" />
         <SidebarInset>
             <SiteHeader username={username} />
-            <main className="w-full h-full p-4">
+            <main className="w-full h-full p-4 overflow-y-auto">
             {children}
             </main>
         </SidebarInset>
