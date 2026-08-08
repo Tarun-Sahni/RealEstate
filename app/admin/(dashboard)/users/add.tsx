@@ -23,6 +23,7 @@ const initialForm = {
     password: "",
     isVerified: false,
     isActive: true,
+    lockOutExpires: "",
 }
 
 const AddUser = ({ onSuccess }: { onSuccess?: () => void }) => {
@@ -67,6 +68,7 @@ const AddUser = ({ onSuccess }: { onSuccess?: () => void }) => {
             payload.append("password", form.password);
             payload.append("isVerified", String(form.isVerified));
             payload.append("isActive", String(form.isActive));
+            payload.append("lockOutExpires", form.lockOutExpires);
             if (avatarFile) {
                 payload.append("avatar", avatarFile);
             }
@@ -163,6 +165,26 @@ const AddUser = ({ onSuccess }: { onSuccess?: () => void }) => {
                                 alt="Avatar preview"
                                 className="mt-2 size-16 rounded-full object-cover"
                             />
+                        )}
+                    </Field>
+                    <Field>
+                        <Label htmlFor="lockOutExpires">Locked Until</Label>
+                        <Input
+                            id="lockOutExpires"
+                            name="lockOutExpires"
+                            type="datetime-local"
+                            value={form.lockOutExpires}
+                            onChange={handleChange}
+                        />
+                        {form.lockOutExpires && (
+                            <Button
+                                type="button"
+                                variant="link"
+                                className="w-fit px-0"
+                                onClick={() => setForm((prev) => ({ ...prev, lockOutExpires: "" }))}
+                            >
+                                Clear
+                            </Button>
                         )}
                     </Field>
                     <Field orientation="horizontal">

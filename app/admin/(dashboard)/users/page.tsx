@@ -75,19 +75,20 @@ const Users = () => {
             <TableHead className="text-center">Email</TableHead>
             <TableHead className="text-center">Verified</TableHead>
             <TableHead className="text-center">Status</TableHead>
+            <TableHead className="text-center">Lockout</TableHead>
             <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {loading ? (
             <TableRow>
-              <TableCell colSpan={6} className="text-center text-muted-foreground">
+              <TableCell colSpan={7} className="text-center text-muted-foreground">
                 Loading...
               </TableCell>
             </TableRow>
           ) : users.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={6} className="text-center text-muted-foreground">
+              <TableCell colSpan={7} className="text-center text-muted-foreground">
                 No users yet.
               </TableCell>
             </TableRow>
@@ -106,6 +107,15 @@ const Users = () => {
                   <Badge variant={user.isActive ? "default" : "secondary"} className="tracking-wider">
                     {user.isActive ? "Active" : "Inactive"}
                   </Badge>
+                </TableCell>
+                <TableCell className="text-center">
+                  {user.lockOutExpires && new Date(user.lockOutExpires) > new Date() ? (
+                    <Badge variant="destructive" className="tracking-wider">
+                      Locked until {new Date(user.lockOutExpires).toLocaleString()}
+                    </Badge>
+                  ) : (
+                    <Badge variant="secondary" className="tracking-wider">Not locked</Badge>
+                  )}
                 </TableCell>
                 <TableCell className="text-right space-x-2">
                   <Dialog>

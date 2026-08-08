@@ -13,6 +13,7 @@ export async function POST(request: NextRequest) {
         const password = formData.get("password")?.toString();
         const isVerified = formData.get("isVerified")?.toString() === "true";
         const isActive = formData.get("isActive")?.toString() === "true";
+        const lockOutExpiresRaw = formData.get("lockOutExpires")?.toString();
         const avatarFile = formData.get("avatar");
 
         if (!username || !email || !password) {
@@ -51,6 +52,7 @@ export async function POST(request: NextRequest) {
             avatar,
             isVerified,
             isActive,
+            lockOutExpires: lockOutExpiresRaw ? new Date(lockOutExpiresRaw) : null,
         });
 
         const userObject = user.toObject();
