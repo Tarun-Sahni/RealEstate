@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
             property
         }, { status: 201 })
     } catch (error) {
+        console.error(error)
         if (error instanceof Error && "code" in error && error.code === 11000) {
             return NextResponse.json({
                 success: false,
