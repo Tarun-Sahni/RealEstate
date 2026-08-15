@@ -7,6 +7,7 @@ const VisitBookingSchema = new Schema(
         email: { type: String, required: true, trim: true, lowercase: true },
         phone: { type: String, required: true, trim: true },
         message: { type: String, trim: true },
+        status: { type: String, enum: ["PENDING", "COMPLETED"], default: "PENDING" },
     },
     { timestamps: true }
 );

@@ -1,4 +1,5 @@
 "use client"
+import { Badge } from "@/components/ui/badge"
 import {
     DialogContent,
     DialogDescription,
@@ -13,6 +14,7 @@ interface VisitBookingProp {
     email: string;
     phone: string;
     message?: string;
+    status: "PENDING" | "COMPLETED";
     property?: { title: string; slug: string };
     createdAt: string;
 }
@@ -28,6 +30,19 @@ const ViewVisitBooking = ({ booking }: { booking: VisitBookingProp }) => {
                 </DialogDescription>
             </DialogHeader>
             <FieldGroup>
+                <Field>
+                    <Label>Status</Label>
+                    {booking.status === "COMPLETED" ? (
+                        <Badge variant="default" className="w-fit tracking-wider">
+                            Completed
+                        </Badge>
+                    ) : (
+                        <Badge className="w-fit animate-pending-glow gap-1.5 border-amber-500/40 bg-amber-500/15 tracking-wider text-amber-600 dark:text-amber-400">
+                            <span className="size-1.5 rounded-full bg-amber-500" />
+                            Pending
+                        </Badge>
+                    )}
+                </Field>
                 <Field>
                     <Label>Property</Label>
                     <p className="text-sm">{booking.property?.title ?? "—"}</p>

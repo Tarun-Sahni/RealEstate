@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import axios, { AxiosError } from "axios"
 import { toast } from "sonner"
 import { CalendarClock, Loader2 } from "lucide-react"
@@ -8,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
+import { useAuth } from "@/store/authStore"
 
 interface PropertyTourFormProps {
   propertyId: string
@@ -51,9 +53,19 @@ const validate = (form: typeof initialForm): FieldErrors => {
 }
 
 const PropertyTourForm = ({ propertyId, propertyTitle }: PropertyTourFormProps) => {
+  const router = useRouter()
+  const userId = useAuth((state: any) => state.userId)
+  const accountEmail = useAuth((state: any) => state.email)
+
   const [form, setForm] = useState(initialForm)
   const [errors, setErrors] = useState<FieldErrors>({})
   const [loading, setLoading] = useState(false)
+
+  // Prefill from the logged-in account once available, without overwriting anything already typed.
+  useEffect(() => {
+    if (!accountEmail) return
+    setForm((prev) => (prev.email ? prev : { ...prev, email: accountEmail }))
+  }, [accountEmail])
 
   const clearError = (field: keyof FieldErrors) => {
     setErrors((prev) => {
@@ -86,6 +98,16 @@ const PropertyTourForm = ({ propertyId, propertyTitle }: PropertyTourFormProps) 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
+    if (!userId) {
+      toast.error("Please login to request a tour.", {
+        action: {
+          label: "Login",
+          onClick: () => router.push("/login"),
+        },
+      })
+      return
+    }
+
     const validationErrors = validate(form)
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors)
@@ -95,13 +117,17 @@ const PropertyTourForm = ({ propertyId, propertyTitle }: PropertyTourFormProps) 
 
     try {
       setLoading(true)
-      const response = await axios.post("/api/user/visitbooking", {
-        propertyId,
-        fullName: form.fullName.trim(),
-        email: form.email.trim(),
-        phone: form.phone.trim(),
-        message: form.message.trim(),
-      })
+      const response = await axios.post(
+        "/api/user/visitbooking",
+        {
+          propertyId,
+          fullName: form.fullName.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+          message: form.message.trim(),
+        },
+        { withCredentials: true }
+      )
       if (response?.data?.success) {
         toast.success(response.data.message)
         setForm(initialForm)

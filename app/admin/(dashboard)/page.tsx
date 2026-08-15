@@ -61,6 +61,8 @@ const Home = async () => {
     newUsersThisWeek,
     totalTourRequests,
     newTourRequestsThisWeek,
+    pendingTourRequests,
+    completedTourRequests,
     propertyDailyRaw,
     inquiryDailyRaw,
   ] = await Promise.all([
@@ -73,6 +75,8 @@ const Home = async () => {
     User.countDocuments({ role: { $ne: "ADMIN" }, createdAt: { $gte: sevenDaysAgo } }),
     VisitBooking.countDocuments(),
     VisitBooking.countDocuments({ createdAt: { $gte: sevenDaysAgo } }),
+    VisitBooking.countDocuments({ status: "PENDING" }),
+    VisitBooking.countDocuments({ status: "COMPLETED" }),
     Property.aggregate<DailyCount>([
       { $match: { createdAt: { $gte: activityStartDate } } },
       { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }, count: { $sum: 1 } } },
@@ -100,8 +104,9 @@ const Home = async () => {
       value: totalTourRequests,
       badgeText: newTourRequestsThisWeek > 0 ? `${newTourRequestsThisWeek} this week` : "No change",
       positive: newTourRequestsThisWeek > 0,
-      headline: newTourRequestsThisWeek > 0 ? "Tour requests coming in this week" : "No tour requests this week",
-      subtext: `${totalTourRequests} all-time requests`,
+      headline: pendingTourRequests > 0 ? `${pendingTourRequests} awaiting action` : "All tours handled",
+      subtext: `${pendingTourRequests} pending · ${completedTourRequests} completed`,
+      highlight: pendingTourRequests > 0,
     },
     {
       label: "Inquiries",

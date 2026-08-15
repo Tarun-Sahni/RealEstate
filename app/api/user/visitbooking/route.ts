@@ -1,4 +1,5 @@
 import connectDB from "@/lib/database";
+import { getAuthUser } from "@/lib/dal";
 import { Property, VisitBooking } from "@/models";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -38,6 +39,14 @@ export async function POST(request: NextRequest) {
         }
 
         await connectDB();
+
+        const authUser = await getAuthUser(request);
+        if (!authUser) {
+            return NextResponse.json({
+                success: false,
+                message: "Please login to request a tour."
+            }, { status: 401 })
+        }
 
         const property = await Property.findById(propertyId).select("_id");
         if (!property) {
