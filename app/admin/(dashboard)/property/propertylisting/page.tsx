@@ -122,6 +122,7 @@ const PropertyListing = () => {
             <TableHead className="text-center">Property Type</TableHead>
             <TableHead className="text-center">Price</TableHead>
             <TableHead className="text-center">Views</TableHead>
+            <TableHead className="text-center">Featured</TableHead>
             <TableHead className="text-center">Status</TableHead>
             <TableHead className="text-center">Created At</TableHead>
             <TableHead className="text-right">Action</TableHead>
@@ -130,13 +131,13 @@ const PropertyListing = () => {
         <TableBody>
           {loading ? (
             <TableRow>
-              <TableCell colSpan={10} className="text-center text-muted-foreground">
+              <TableCell colSpan={11} className="text-center text-muted-foreground">
                 Loading...
               </TableCell>
             </TableRow>
           ) : properties.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={10} className="text-center text-muted-foreground">
+              <TableCell colSpan={11} className="text-center text-muted-foreground">
                 No properties yet.
               </TableCell>
             </TableRow>
@@ -155,13 +156,15 @@ const PropertyListing = () => {
                     {(property.views ?? 0).toLocaleString("en-IN")}
                   </span>
                 </TableCell>
-                <TableCell className="text-center space-x-1">
+                <TableCell className="text-center">
+                  <Badge variant={property.isFeatured ? "default" : "secondary"} className="tracking-wider">
+                    {property.isFeatured ? "Yes" : "No"}
+                  </Badge>
+                </TableCell>
+                <TableCell className="text-center">
                   <Badge variant={property.isActive ? "default" : "secondary"} className="tracking-wider">
                     {property.isActive ? "Active" : "Inactive"}
                   </Badge>
-                  {property.isFeatured && (
-                    <Badge variant="outline" className="tracking-wider">Featured</Badge>
-                  )}
                 </TableCell>
                 <TableCell className="text-center">
                   {new Date(property.createdAt).toLocaleDateString()}

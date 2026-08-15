@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import axios, { AxiosError } from 'axios'
 import { useAuth } from '@/store/authStore'
+import { useFavorites } from '@/store/favoritesStore'
 import { useRouter } from 'next/navigation'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -52,6 +53,7 @@ const Header = () => {
         role: "",
     });
     const setAuth = useAuth((state: any) => state.setAuth);
+    const setFavorites = useFavorites((state) => state.setFavorites);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -75,6 +77,14 @@ const Header = () => {
                             user?.avatar,
                             user?.role
                         )
+                        try {
+                            const favoritesResponse = await axios.get("/api/user/favorites", { withCredentials: true })
+                            if (favoritesResponse?.data?.success) {
+                                setFavorites(favoritesResponse.data.propertyIds)
+                            }
+                        } catch (favoritesError) {
+                            // Non-fatal: hearts just fall back to "not saved" until the next successful fetch.
+                        }
                     } else {
                         router.push("/admin")
                     }
@@ -87,7 +97,9 @@ const Header = () => {
             }
         }
         fetchUser();
-    }, [setAuth])
+    }, [setAuth, setFavorites])
+
+    const resetFavorites = useFavorites((state) => state.reset);
 
     const logOut = async () => {
         try {
@@ -100,6 +112,7 @@ const Header = () => {
                     avatar: "",
                     role: "",
                 });
+                resetFavorites();
                 toast.success(response.data.message);
                 router.refresh();
             }
@@ -169,8 +182,8 @@ const Header = () => {
                                         <DropdownMenuItem onClick={() => router.push("/profile")}>
                                             Profile
                                         </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                            Settings
+                                        <DropdownMenuItem onClick={() => router.push("/wishlists")}>
+                                            Wishlists
                                         </DropdownMenuItem>
                                     </DropdownMenuGroup>
                                     <DropdownMenuSeparator />

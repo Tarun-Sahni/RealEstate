@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import axios, { AxiosError } from "axios"
+import { toast } from "sonner"
 import {
   BedDouble,
   Bath,
@@ -15,6 +18,8 @@ import {
   ChevronRight,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useAuth } from "@/store/authStore"
+import { useFavorites } from "@/store/favoritesStore"
 import {
   Carousel,
   CarouselContent,
@@ -23,6 +28,7 @@ import {
 } from "@/components/ui/carousel"
 
 export interface PropertyCardProps {
+  id: string
   slug: string
   title: string
   coverImage?: string
@@ -120,6 +126,7 @@ const StatPill = ({ icon: Icon, children }: { icon: React.ElementType; children:
 )
 
 const PropertyCard = ({
+  id,
   slug,
   title,
   coverImage,
@@ -136,9 +143,52 @@ const PropertyCard = ({
   // isFeatured,
   className,
 }: PropertyCardProps) => {
-  const [isSaved, setIsSaved] = useState(false)
+  const router = useRouter()
+  const userId = useAuth((state: any) => state.userId)
+  const isSaved = useFavorites((state) => state.ids.includes(id))
+  const addFavorite = useFavorites((state) => state.add)
+  const removeFavorite = useFavorites((state) => state.remove)
+  const [togglingSave, setTogglingSave] = useState(false)
   const location = [city, state].filter(Boolean).join(", ")
   const slides = images && images.length > 0 ? images : coverImage ? [coverImage] : []
+
+  const toggleSave = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (!userId) {
+      toast.error("Please login to save properties to your wishlist.", {
+        action: {
+          label: "Login",
+          onClick: () => router.push("/login"),
+        },
+      })
+      return
+    }
+
+    if (togglingSave) return
+
+    const wasSaved = isSaved
+    wasSaved ? removeFavorite(id) : addFavorite(id)
+    setTogglingSave(true)
+    try {
+      const response = await axios.post(
+        "/api/user/favorites",
+        { propertyId: id },
+        { withCredentials: true }
+      )
+      if (!response?.data?.success) {
+        wasSaved ? addFavorite(id) : removeFavorite(id)
+      }
+    } catch (error) {
+      wasSaved ? addFavorite(id) : removeFavorite(id)
+      const err = error as AxiosError<{ message?: string }>
+      const message = err.response?.data?.message || err.message || "Something went wrong"
+      toast.error(message)
+    } finally {
+      setTogglingSave(false)
+    }
+  }
 
   return (
     <Link
@@ -195,11 +245,7 @@ const PropertyCard = ({
 
         <button
           type="button"
-          onClick={(e) => {
-            e.preventDefault()
-            e.stopPropagation()
-            setIsSaved((prev) => !prev)
-          }}
+          onClick={toggleSave}
           aria-label={isSaved ? "Remove from saved" : "Save property"}
           className="absolute top-3 right-3 z-10 flex size-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60"
         >

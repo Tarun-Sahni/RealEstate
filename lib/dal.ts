@@ -27,6 +27,27 @@ export const verifyAdminSession = cache(async () => {
     return { userId: user._id.toString(), username: user.username, role: user.role };
 });
 
+// Same as verifyAdminSession but for any authenticated user, regardless of role.
+export const verifyUserSession = cache(async () => {
+    const token = (await cookies()).get("token")?.value;
+    if (!token) {
+        redirect("/login");
+    }
+
+    const decoded = verifyToken(token) as JwtPayload | null;
+    if (!decoded?.userId) {
+        redirect("/login");
+    }
+
+    await connectDB();
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+        redirect("/login");
+    }
+
+    return { userId: user._id.toString(), username: user.username, role: user.role };
+});
+
 // For Route Handlers: reads the cookie off the request instead of next/headers,
 // and returns null instead of redirecting so callers can respond with JSON. Assumes
 // the caller has already called connectDB().
@@ -43,6 +64,26 @@ export async function getAdminUser(request: NextRequest) {
 
     const user = await User.findById(decoded.userId);
     if (!user || user.role !== "ADMIN") {
+        return null;
+    }
+
+    return user;
+}
+
+// Same as getAdminUser but for any authenticated user, regardless of role.
+export async function getAuthUser(request: NextRequest) {
+    const token = request.cookies.get("token")?.value;
+    if (!token) {
+        return null;
+    }
+
+    const decoded = verifyToken(token) as JwtPayload | null;
+    if (!decoded?.userId) {
+        return null;
+    }
+
+    const user = await User.findById(decoded.userId);
+    if (!user) {
         return null;
     }
 

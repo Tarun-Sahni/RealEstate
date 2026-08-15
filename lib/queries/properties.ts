@@ -1,6 +1,6 @@
 import { cache } from "react";
 import connectDB from "@/lib/database";
-import { Category, ListingType, Property, PropertyType, SubCategory } from "@/models";
+import { Category, Favorite, ListingType, Property, PropertyType, SubCategory } from "@/models";
 
 const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
@@ -158,7 +158,7 @@ export async function getPublicProperties(filters: PropertyListFilters) {
     ]);
 
     return {
-        properties: properties as unknown as PublicPropertyListItem[],
+        properties: toPlain(properties) as unknown as PublicPropertyListItem[],
         pagination: {
             page,
             limit,
@@ -182,7 +182,7 @@ export async function getFeaturedProperties(limit = 8): Promise<PublicPropertyLi
         .limit(cappedLimit)
         .lean();
 
-    return properties as unknown as PublicPropertyListItem[];
+    return toPlain(properties) as unknown as PublicPropertyListItem[];
 }
 
 export async function getMostViewedProperties(limit = 8): Promise<PublicPropertyListItem[]> {
@@ -199,7 +199,7 @@ export async function getMostViewedProperties(limit = 8): Promise<PublicProperty
         .limit(cappedLimit)
         .lean();
 
-    return properties as unknown as PublicPropertyListItem[];
+    return toPlain(properties) as unknown as PublicPropertyListItem[];
 }
 
 // Wrapped in React's cache() so the detail page's generateMetadata() and page
@@ -220,8 +220,33 @@ export const getPropertyBySlug = cache(async (slug: string): Promise<PublicPrope
         .populate("propertyType", "name")
         .lean();
 
-    return property as unknown as PublicPropertyDetail | null;
+    return toPlain(property) as unknown as PublicPropertyDetail | null;
 });
+
+// Most-recently-saved first. Properties that were deactivated or deleted since
+// being saved are silently dropped rather than shown as broken cards.
+export async function getWishlistProperties(userId: string): Promise<PublicPropertyListItem[]> {
+    await connectDB();
+
+    const favorites = await Favorite.find({ user: userId })
+        .sort({ createdAt: -1 })
+        .populate({
+            path: "property",
+            match: { isActive: true },
+            select: LIST_PROJECTION,
+            populate: [
+                { path: "category", select: "name slug" },
+                { path: "subcategory", select: "name slug" },
+                { path: "listingType", select: "name" },
+                { path: "propertyType", select: "name" },
+            ],
+        })
+        .lean();
+
+    const properties = favorites.map((favorite) => favorite.property).filter(Boolean);
+
+    return toPlain(properties) as unknown as PublicPropertyListItem[];
+}
 
 export async function getPublicCategories() {
     await connectDB();

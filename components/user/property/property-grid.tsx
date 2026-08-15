@@ -26,6 +26,7 @@ const PropertyGrid = ({ properties, className }: PropertyGridProps) => {
       {properties.map((property) => (
         <PropertyCard
           key={property._id}
+          id={property._id}
           slug={property.slug}
           title={property.title}
           coverImage={property.coverImage}
