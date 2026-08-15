@@ -21,25 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { toast } from 'sonner'
 import { ThemeToggle } from '../../theme/themetoggle'
-
-export const NAVLINKS = [
-    {
-        name: "Home",
-        href: "/",
-    },
-    {
-        name: "About Us",
-        href: "/aboutus",
-    },
-    {
-        name: "Contact Us",
-        href: "/contactus",
-    },
-    {
-        name: "Properties",
-        href: "/properties",
-    }
-]
+import { NAVLINKS } from '@/lib/navlinks'
 
 const Header = () => {
     const router = useRouter();

@@ -10,6 +10,11 @@ import {
 } from "@/components/ui/carousel"
 import { getTeamMembers } from "@/lib/queries/team";
 
+export const metadata = {
+    title: "About Us",
+    description: "Learn about Gurgaon Elite Estate - a trusted real estate agency helping buyers, sellers and investors find apartments, villas, plots and commercial properties across Gurgaon.",
+}
+
 const About = async () => {
     const teamMembers = await getTeamMembers();
 
@@ -38,7 +43,7 @@ const About = async () => {
                         </div>
                     </div>
                 </div>
-                <div className='flex justify-center lg:justify-end items-center lg:order-2 roder-1'>
+                <div className='flex justify-center lg:justify-end items-center lg:order-2 order-1'>
                     <Image
                         src="/aboutus.png"
                         alt='aboutus'
@@ -53,7 +58,7 @@ const About = async () => {
                 <div className="w-full lg:w-1/2 flex flex-col justify-center items-center lg:items-start gap-4 p-4">
                     <DesignOne />
                     <h1 className="text-4xl md:text-7xl font-playfair text-center lg:text-start">Our Values</h1>
-                    <p className="tracking-wider font-inter max-w-xl text-muted-foreground text-center lg:text-start text-sm md:text-base">Our story is one of continuous growth and evolution. We started as a small team with big dreams, determined to create a real estate platform that transcended the ordinary.</p>
+                    <p className="tracking-wider font-inter max-w-xl text-muted-foreground text-center lg:text-start text-sm md:text-base">These principles guide every property we list and every client relationship we build, from your first enquiry to the day you get the keys.</p>
                 </div>
                 <div className="w-full border-8 rounded-lg grid grid-cols-1 md:grid-cols-2 p-2 md:p-8 border-neutral-200/50 dark:border-neutral-800">
                     <div className="flex flex-col gap-4 border-b p-6 lg:p-10">
@@ -63,7 +68,7 @@ const About = async () => {
                             </div>
                             <h2 className="text-3xl font-bold font-playfair">Trust</h2>
                         </div>
-                        <p className="tracking-wider font-inter max-w-xl text-muted-foreground text-center lg:text-start text-sm md:text-base">Trust is the cornerstone of every successful real estate transaction.</p>
+                        <p className="tracking-wider font-inter max-w-xl text-muted-foreground text-center lg:text-start text-sm md:text-base">Verified listings, honest pricing and clear communication at every stage - so you always know exactly what you're buying, selling or renting.</p>
                     </div>
                     <div className="flex flex-col gap-4 border-b p-6 lg:p-10 md:border-l">
                         <div className="flex flex-row gap-4 items-center justify-center lg:justify-start">
@@ -72,7 +77,7 @@ const About = async () => {
                             </div>
                             <h2 className="text-3xl font-bold font-playfair">Excellence</h2>
                         </div>
-                        <p className="tracking-wider font-inter max-w-xl text-muted-foreground text-center lg:text-start text-sm md:text-base">Trust is the cornerstone of every successful real estate transaction.</p>
+                        <p className="tracking-wider font-inter max-w-xl text-muted-foreground text-center lg:text-start text-sm md:text-base">Deep local market knowledge and meticulous attention to detail, from property shortlisting and site visits through to paperwork and handover.</p>
                     </div>
                     <div className="flex flex-col gap-4 p-6 lg:p-10 border-b md:border-b-0">
                         <div className="flex flex-row gap-4 items-center justify-center lg:justify-start">
@@ -81,7 +86,7 @@ const About = async () => {
                             </div>
                             <h2 className="text-3xl font-bold font-playfair">Client-Specific</h2>
                         </div>
-                        <p className="tracking-wider font-inter max-w-xl text-muted-foreground text-center lg:text-start text-sm md:text-base">Trust is the cornerstone of every successful real estate transaction.</p>
+                        <p className="tracking-wider font-inter max-w-xl text-muted-foreground text-center lg:text-start text-sm md:text-base">No two buyers are alike. We take the time to understand your budget, lifestyle and goals before recommending a single property.</p>
                     </div>
                     <div className="flex flex-col gap-4 p-6 lg:p-10 md:border-l">
                         <div className="flex flex-row gap-4 items-center justify-center lg:justify-start">
@@ -90,7 +95,7 @@ const About = async () => {
                             </div>
                             <h2 className="text-3xl font-bold font-playfair">Our Commitment</h2>
                         </div>
-                        <p className="tracking-wider font-inter max-w-xl text-muted-foreground text-center lg:text-start text-sm md:text-base">Trust is the cornerstone of every successful real estate transaction.</p>
+                        <p className="tracking-wider font-inter max-w-xl text-muted-foreground text-center lg:text-start text-sm md:text-base">Our support doesn't end at the sale - we're on hand for documentation, financing questions and after-sales support whenever you need us.</p>
                     </div>
                 </div>
             </div>
@@ -99,20 +104,20 @@ const About = async () => {
                 <div className="flex flex-col gap-3 items-center">
                     <DesignOne />
                     <h1 className="text-4xl md:text-7xl font-playfair text-center lg:text-start">Our Achievements</h1>
-                    <p className="tracking-wider font-inter max-w-3xl text-muted-foreground text-center text-sm md:text-base">Our story is one of continuous growth and evolution. We started as a small team with big dreams, determined to create a real estate platform that transcended the ordinary.</p>
+                    <p className="tracking-wider font-inter max-w-3xl text-muted-foreground text-center text-sm md:text-base">A track record built one successful deal at a time, across Gurgaon's most sought-after neighborhoods.</p>
                 </div>
                 <div className="flex flex-col md:flex-row gap-4">
                     <div className="flex flex-col items-center md:items-start gap-4 p-4 md:p-8 bg-linear-to-b from-neutral-500/10 to-transparent rounded-md">
                         <h2 className="font-playfair text-3xl">3+ Years of Excellence</h2>
-                        <p className="tracking-wider text-muted-foreground text-sm md:text-base text-center md:text-left">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, vel molestias soluta eum minus tempora! Ratione, suscipit vel! Facilis, mollitia. Impedit, eveniet! Architecto, quaerat reprehenderit.</p>
+                        <p className="tracking-wider text-muted-foreground text-sm md:text-base text-center md:text-left">Since our founding, we've helped hundreds of families and investors find the right apartment, villa, plot or commercial space across Gurgaon.</p>
                     </div>
                     <div className="flex flex-col items-center md:items-start gap-4 p-4 md:p-8 bg-linear-to-b from-neutral-500/10 to-transparent rounded-md">
                         <h2 className="font-playfair text-3xl">Happy Clients</h2>
-                        <p className="tracking-wider text-muted-foreground text-sm md:text-base text-center md:text-left">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, vel molestias soluta eum minus tempora! Ratione, suscipit vel! Facilis, mollitia. Impedit, eveniet! Architecto, quaerat reprehenderit.</p>
+                        <p className="tracking-wider text-muted-foreground text-sm md:text-base text-center md:text-left">A client-first approach has earned the trust of 200+ buyers, sellers and tenants who return to us for every real estate decision.</p>
                     </div>
                     <div className="flex flex-col items-center md:items-start gap-4 p-4 md:p-8 bg-linear-to-b from-neutral-500/10 to-transparent rounded-md">
                         <h2 className="font-playfair text-3xl">Industry Recognition</h2>
-                        <p className="tracking-wider text-muted-foreground text-sm md:text-base text-center md:text-left">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, vel molestias soluta eum minus tempora! Ratione, suscipit vel! Facilis, mollitia. Impedit, eveniet! Architecto, quaerat reprehenderit.</p>
+                        <p className="tracking-wider text-muted-foreground text-sm md:text-base text-center md:text-left">Recognized among Gurgaon's emerging real estate consultancies for transparent dealings and deep local market expertise.</p>
                     </div>
                 </div>
             </div>
@@ -122,7 +127,7 @@ const About = async () => {
                     <div className="flex flex-col items-center">
                         <DesignOne />
                         <h1 className="text-4xl md:text-7xl font-playfair text-center lg:text-start">Meet Our Team</h1>
-                        <p className="tracking-wider font-inter max-w-3xl text-muted-foreground text-center text-sm md:text-base">Our story is one of continuous growth and evolution. We started as a small team with big dreams, determined to create a real estate platform that transcended the ordinary.</p>
+                        <p className="tracking-wider font-inter max-w-3xl text-muted-foreground text-center text-sm md:text-base">The consultants and negotiators behind every successful deal, dedicated to finding you the right property in Gurgaon.</p>
                     </div>
                     <Carousel className="w-full">
                         <CarouselContent>

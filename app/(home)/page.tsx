@@ -3,6 +3,11 @@ import CtaBanner from './cta-banner'
 import PropertyGrid from '@/components/user/property/property-grid'
 import { getFeaturedProperties, getMostViewedProperties } from '@/lib/queries/properties'
 
+export const metadata = {
+  title: "Buy, Sell & Rent Properties in Gurgaon",
+  description: "Browse featured and most-viewed apartments, villas, plots and commercial properties in Gurgaon. Verified listings, transparent pricing and expert guidance from Gurgaon Elite Estate.",
+}
+
 const Home = async () => {
   const [featuredProperties, mostViewedProperties] = await Promise.all([
     getFeaturedProperties(8),

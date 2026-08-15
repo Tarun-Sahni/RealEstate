@@ -40,7 +40,7 @@ const HeroSection = () => {
             Discover Your<br />
             Dream Property with<br />
             <span className="text-yellow-500">
-              Gurgoan Elite Estate
+              Gurgaon Elite Estate
             </span>
           </h1>
           <p className="max-w-xs sm:max-w-sm font-inter text-white text-center tracking-widest text-sm md:text-base leading-relaxed">Explore our curated selection of exquisite properties meticulously tailored to your unique dream home vision</p>
