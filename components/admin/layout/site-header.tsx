@@ -26,6 +26,7 @@ const routeLabels: Record<string, string> = {
   inquiry: "Inquiry",
   visitbooking: "Tour Requests",
   add: "Add Property",
+  view: "View Property",
 }
 
 // Segments that don't have their own page (sidebar-only groupings) shouldn't be links.
@@ -42,10 +43,11 @@ function buildCrumbs(pathname: string) {
 
   return segments.map((segment, index) => {
     href += `/${segment}`;
+    const isLast = index === segments.length - 1;
     return {
       href,
-      label: routeLabels[segment] ?? (isObjectId(segment) ? "Edit Property" : humanize(segment)),
-      isLast: index === segments.length - 1,
+      label: routeLabels[segment] ?? (isObjectId(segment) ? (isLast ? "Edit Property" : "Property") : humanize(segment)),
+      isLast,
       isNavigable: !nonNavigableSegments.has(segment),
     }
   })

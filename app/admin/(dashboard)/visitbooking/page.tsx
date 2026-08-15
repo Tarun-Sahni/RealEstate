@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import axios, { AxiosError } from "axios"
+import Link from "next/link"
 import { useCallback, useEffect, useState } from "react"
 import { toast } from "sonner"
 import DeleteVisitBooking from "./delete"
@@ -22,7 +23,7 @@ interface VisitBookingItem {
   email: string;
   phone: string;
   message?: string;
-  property?: { title: string; slug: string };
+  property?: { _id: string; title: string; slug: string };
   createdAt: string;
 }
 
@@ -90,6 +91,17 @@ const VisitBookingPage = () => {
                   {new Date(booking.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                 </TableCell>
                 <TableCell className="text-right space-x-2">
+                  {booking.property ? (
+                    <Button variant="outline" asChild>
+                      <Link href={`/admin/property/propertylisting/${booking.property._id}/view`}>
+                        View Property
+                      </Link>
+                    </Button>
+                  ) : (
+                    <Button variant="outline" disabled>
+                      View Property
+                    </Button>
+                  )}
                   <Dialog>
                     <DialogTrigger asChild>
                       <Button variant="outline">View</Button>

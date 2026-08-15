@@ -171,6 +171,9 @@ const PropertyListing = () => {
                 </TableCell>
                 <TableCell className="text-right space-x-2">
                   <Button variant="outline" asChild>
+                    <Link href={`/admin/property/propertylisting/${property._id}/view`}>View</Link>
+                  </Button>
+                  <Button variant="outline" asChild>
                     <Link href={`/admin/property/propertylisting/${property._id}`}>Edit</Link>
                   </Button>
                   <AlertDialog>

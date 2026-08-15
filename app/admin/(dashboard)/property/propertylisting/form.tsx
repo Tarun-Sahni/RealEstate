@@ -117,7 +117,7 @@ const toNumberOrUndefined = (value: string) => (value === "" ? undefined : Numbe
 const linesToArray = (value: string) => value.split("\n").map((item) => item.trim()).filter(Boolean);
 const arrayToLines = (value?: string[]) => (value ?? []).join("\n");
 
-const PropertyForm = ({ propertyId }: { propertyId?: string }) => {
+const PropertyForm = ({ propertyId, readOnly = false }: { propertyId?: string; readOnly?: boolean }) => {
     const router = useRouter();
     const isEdit = Boolean(propertyId);
 
@@ -463,7 +463,8 @@ const PropertyForm = ({ propertyId }: { propertyId?: string }) => {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="w-full space-y-4">
+        <form onSubmit={readOnly ? (e) => e.preventDefault() : handleSubmit} className="w-full space-y-4">
+            <fieldset disabled={readOnly} className="contents">
             <Card>
                 <CardHeader>
                     <CardTitle className="font-inter font-medium text-lg">Basic Information</CardTitle>
@@ -962,21 +963,35 @@ const PropertyForm = ({ propertyId }: { propertyId?: string }) => {
                     </CardContent>
                 </Card>
             </div>
+            </fieldset>
 
-            <div className="flex justify-end gap-2 pt-2">
-                <Button type="button" variant="outline" disabled={loading} onClick={() => router.push("/admin/property/propertylisting")}>
-                    Cancel
-                </Button>
-                <Button type="submit" disabled={loading || optionsLoading}>
-                    {loading ?
-                        <>
-                            <Loader2 className="animate-spin" />
-                            {isEdit ? "Saving..." : "Adding..."}
-                        </> :
-                        isEdit ? "Save Changes" : "Add Property"
-                    }
-                </Button>
-            </div>
+            {readOnly ? (
+                <div className="flex justify-end gap-2 pt-2">
+                    <Button type="button" variant="outline" onClick={() => router.push("/admin/property/propertylisting")}>
+                        Back to Listing
+                    </Button>
+                    {propertyId && (
+                        <Button type="button" onClick={() => router.push(`/admin/property/propertylisting/${propertyId}`)}>
+                            Edit Property
+                        </Button>
+                    )}
+                </div>
+            ) : (
+                <div className="flex justify-end gap-2 pt-2">
+                    <Button type="button" variant="outline" disabled={loading} onClick={() => router.push("/admin/property/propertylisting")}>
+                        Cancel
+                    </Button>
+                    <Button type="submit" disabled={loading || optionsLoading}>
+                        {loading ?
+                            <>
+                                <Loader2 className="animate-spin" />
+                                {isEdit ? "Saving..." : "Adding..."}
+                            </> :
+                            isEdit ? "Save Changes" : "Add Property"
+                        }
+                    </Button>
+                </div>
+            )}
         </form>
     )
 }
