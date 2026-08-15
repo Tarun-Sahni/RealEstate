@@ -88,12 +88,27 @@ export async function GET(request: NextRequest) {
             }, { status: 401 })
         }
 
-        const users = await User.find({ role: { $ne: "ADMIN" } }).sort({ createdAt: -1 });
+        const searchParams = request.nextUrl.searchParams;
+        const page = Math.max(1, Number(searchParams.get("page")) || 1);
+        const limit = Math.min(100, Math.max(1, Number(searchParams.get("limit")) || 10));
+        const skip = (page - 1) * limit;
+
+        const filter = { role: { $ne: "ADMIN" } };
+        const [users, total] = await Promise.all([
+            User.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+            User.countDocuments(filter),
+        ]);
 
         return NextResponse.json({
             success: true,
             message: "Users fetched successfully.",
-            users
+            users,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages: Math.max(1, Math.ceil(total / limit)),
+            },
         }, { status: 200 })
     } catch (error) {
         return NextResponse.json({

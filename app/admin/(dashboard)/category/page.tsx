@@ -2,6 +2,15 @@
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
+import {
   Table,
   TableBody,
   TableCell,
@@ -16,6 +25,7 @@ import DeleteCategory from "./delete"
 import UpdateCategory from "./update"
 import { PlusCircle } from "lucide-react"
 import axios, { AxiosError } from "axios"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
 import { toast } from "sonner"
 
@@ -30,16 +40,45 @@ interface CategoryItem {
   createdAt: string;
 }
 
+const LIMIT = 10;
+
+// Builds a windowed page list, e.g. [1, "...", 4, 5, 6, "...", 10], so the pager
+// stays usable even with a large number of pages.
+const getPageWindow = (current: number, totalPages: number) => {
+  const pages: (number | "ellipsis")[] = [];
+  const start = Math.max(2, current - 1);
+  const end = Math.min(totalPages - 1, current + 1);
+
+  pages.push(1);
+  if (start > 2) pages.push("ellipsis");
+  for (let i = start; i <= end; i++) pages.push(i);
+  if (end < totalPages - 1) pages.push("ellipsis");
+  if (totalPages > 1) pages.push(totalPages);
+
+  return pages;
+}
+
 const Category = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const page = Math.max(1, Number(searchParams.get("page")) || 1);
+
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<CategoryItem[]>([])
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   const getAllCategories = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get("/api/admin/category", { withCredentials: true })
+      const response = await axios.get("/api/admin/category", {
+        params: { page, limit: LIMIT },
+        withCredentials: true,
+      })
       if (response?.data?.success) {
         setCategories(response.data.categories)
+        setTotal(response.data.pagination?.total ?? 0)
+        setTotalPages(response.data.pagination?.totalPages ?? 1)
       }
     } catch (error) {
       const err = error as AxiosError<{ message?: string }>;
@@ -48,11 +87,20 @@ const Category = () => {
     } finally {
       setLoading(false);
     }
-  }, [])
+  }, [page])
 
   useEffect(() => {
     getAllCategories();
   }, [getAllCategories])
+
+  const goToPage = (target: number) => {
+    const clamped = Math.min(Math.max(1, target), totalPages);
+    router.push(`/admin/category?page=${clamped}`);
+  }
+
+  const pageWindow = getPageWindow(page, totalPages);
+  const startRow = total === 0 ? 0 : (page - 1) * LIMIT + 1;
+  const endRow = Math.min(page * LIMIT, total);
 
   return (
     <div className="w-full h-full space-y-4">
@@ -93,7 +141,7 @@ const Category = () => {
           ) : (
             categories.map((category, index) => (
               <TableRow key={category._id}>
-                <TableCell className="text-left">{index + 1}</TableCell>
+                <TableCell className="text-left">{startRow + index}</TableCell>
                 <TableCell className="font-medium text-center">{category.name}</TableCell>
                 <TableCell className="text-center">{category.slug}</TableCell>
                 <TableCell className="text-center">
@@ -126,6 +174,59 @@ const Category = () => {
           )}
         </TableBody>
       </Table>
+      {!loading && total > 0 && (
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-muted-foreground">
+            Showing {startRow}-{endRow} of {total}
+          </p>
+          <Pagination className="mx-0 w-fit">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href="#"
+                  aria-disabled={page <= 1}
+                  className={page <= 1 ? "pointer-events-none opacity-50" : undefined}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    goToPage(page - 1);
+                  }}
+                />
+              </PaginationItem>
+              {pageWindow.map((item, index) =>
+                item === "ellipsis" ? (
+                  <PaginationItem key={`ellipsis-${index}`}>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                ) : (
+                  <PaginationItem key={item}>
+                    <PaginationLink
+                      href="#"
+                      isActive={item === page}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        goToPage(item);
+                      }}
+                    >
+                      {item}
+                    </PaginationLink>
+                  </PaginationItem>
+                )
+              )}
+              <PaginationItem>
+                <PaginationNext
+                  href="#"
+                  aria-disabled={page >= totalPages}
+                  className={page >= totalPages ? "pointer-events-none opacity-50" : undefined}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    goToPage(page + 1);
+                  }}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
     </div>
 
   )

@@ -156,6 +156,9 @@ const PropertySchema = new Schema(
     { timestamps: true }
 );
 
+// Covers the public listing route's default query: active properties, newest first.
+PropertySchema.index({ isActive: 1, createdAt: -1 });
+
 // Matches the search shape documented in CLAUDE.md: geo search on `location`,
 // full-text search across title/description/city/state.
 PropertySchema.index({ location: "2dsphere" });

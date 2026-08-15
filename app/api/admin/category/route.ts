@@ -60,12 +60,39 @@ export async function GET(request: NextRequest) {
             }, { status: 401 })
         }
 
-        const categories = await Category.find().sort({ createdAt: -1 });
+        // Pagination is opt-in via `page` so existing callers that need the full
+        // unpaginated list (e.g. the property form's category dropdown) keep working.
+        const searchParams = request.nextUrl.searchParams;
+        const paginate = searchParams.has("page");
+
+        if (!paginate) {
+            const categories = await Category.find().sort({ createdAt: -1 });
+            return NextResponse.json({
+                success: true,
+                message: "Categories fetched successfully.",
+                categories
+            }, { status: 200 })
+        }
+
+        const page = Math.max(1, Number(searchParams.get("page")) || 1);
+        const limit = Math.min(100, Math.max(1, Number(searchParams.get("limit")) || 10));
+        const skip = (page - 1) * limit;
+
+        const [categories, total] = await Promise.all([
+            Category.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
+            Category.countDocuments(),
+        ]);
 
         return NextResponse.json({
             success: true,
             message: "Categories fetched successfully.",
-            categories
+            categories,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages: Math.max(1, Math.ceil(total / limit)),
+            },
         }, { status: 200 })
     } catch (error) {
         return NextResponse.json({

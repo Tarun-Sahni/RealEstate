@@ -51,12 +51,39 @@ export async function GET(request: NextRequest) {
             }, { status: 401 })
         }
 
-        const propertyTypes = await PropertyType.find().sort({ createdAt: -1 });
+        // Pagination is opt-in via `page` so existing callers that need the full
+        // unpaginated list (e.g. the property form's property type dropdown) keep working.
+        const searchParams = request.nextUrl.searchParams;
+        const paginate = searchParams.has("page");
+
+        if (!paginate) {
+            const propertyTypes = await PropertyType.find().sort({ createdAt: -1 });
+            return NextResponse.json({
+                success: true,
+                message: "Property types fetched successfully.",
+                propertyTypes
+            }, { status: 200 })
+        }
+
+        const page = Math.max(1, Number(searchParams.get("page")) || 1);
+        const limit = Math.min(100, Math.max(1, Number(searchParams.get("limit")) || 10));
+        const skip = (page - 1) * limit;
+
+        const [propertyTypes, total] = await Promise.all([
+            PropertyType.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
+            PropertyType.countDocuments(),
+        ]);
 
         return NextResponse.json({
             success: true,
             message: "Property types fetched successfully.",
-            propertyTypes
+            propertyTypes,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages: Math.max(1, Math.ceil(total / limit)),
+            },
         }, { status: 200 })
     } catch (error) {
         return NextResponse.json({

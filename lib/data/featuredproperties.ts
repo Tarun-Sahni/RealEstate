@@ -15,7 +15,6 @@ export const FEATURED_PROPERTIES: Omit<PropertyCardProps, "className">[] = [
     area: { value: 1850, unit: "sqft" },
     listingType: "For Sale",
     propertyType: "Apartment",
-    isFeatured: true,
   },
   {
     slug: "independent-villa-golf-course-road",
@@ -29,7 +28,6 @@ export const FEATURED_PROPERTIES: Omit<PropertyCardProps, "className">[] = [
     area: { value: 4200, unit: "sqft" },
     listingType: "For Sale",
     propertyType: "Villa",
-    isFeatured: true,
   },
   {
     slug: "commercial-office-space-sohna-road",
@@ -42,7 +40,6 @@ export const FEATURED_PROPERTIES: Omit<PropertyCardProps, "className">[] = [
     area: { value: 3000, unit: "sqft" },
     listingType: "For Rent",
     propertyType: "Commercial",
-    isFeatured: false,
   },
   {
     slug: "2bhk-budget-flat-sector-49",
@@ -56,6 +53,5 @@ export const FEATURED_PROPERTIES: Omit<PropertyCardProps, "className">[] = [
     area: { value: 1100, unit: "sqft" },
     listingType: "For Sale",
     propertyType: "Apartment",
-    isFeatured: false,
   },
 ]

@@ -55,14 +55,45 @@ export async function GET(request: NextRequest) {
             }, { status: 401 })
         }
 
-        const subcategories = await SubCategory.find()
-            .populate("category", "name slug")
-            .sort({ createdAt: -1 });
+        // Pagination is opt-in via `page` so existing callers that need the full
+        // unpaginated list (e.g. the property form's subcategory dropdown) keep working.
+        const searchParams = request.nextUrl.searchParams;
+        const paginate = searchParams.has("page");
+
+        if (!paginate) {
+            const subcategories = await SubCategory.find()
+                .populate("category", "name slug")
+                .sort({ createdAt: -1 });
+            return NextResponse.json({
+                success: true,
+                message: "Subcategories fetched successfully.",
+                subcategories
+            }, { status: 200 })
+        }
+
+        const page = Math.max(1, Number(searchParams.get("page")) || 1);
+        const limit = Math.min(100, Math.max(1, Number(searchParams.get("limit")) || 10));
+        const skip = (page - 1) * limit;
+
+        const [subcategories, total] = await Promise.all([
+            SubCategory.find()
+                .populate("category", "name slug")
+                .sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(limit),
+            SubCategory.countDocuments(),
+        ]);
 
         return NextResponse.json({
             success: true,
             message: "Subcategories fetched successfully.",
-            subcategories
+            subcategories,
+            pagination: {
+                page,
+                limit,
+                total,
+                totalPages: Math.max(1, Math.ceil(total / limit)),
+            },
         }, { status: 200 })
     } catch (error) {
         return NextResponse.json({
