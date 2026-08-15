@@ -167,6 +167,23 @@ export async function getPublicProperties(filters: PropertyListFilters) {
     };
 }
 
+export async function getFeaturedProperties(limit = 12): Promise<PublicPropertyListItem[]> {
+    await connectDB();
+    const cappedLimit = Math.min(12, Math.max(1, limit));
+
+    const properties = await Property.find({ isActive: true, isFeatured: true })
+        .select(LIST_PROJECTION)
+        .populate("category", "name slug")
+        .populate("subcategory", "name slug")
+        .populate("listingType", "name")
+        .populate("propertyType", "name")
+        .sort({ createdAt: -1 })
+        .limit(cappedLimit)
+        .lean();
+
+    return properties as unknown as PublicPropertyListItem[];
+}
+
 export async function getPropertyBySlug(slug: string): Promise<PublicPropertyDetail | null> {
     await connectDB();
 

@@ -1,12 +1,14 @@
 import { SearchX } from "lucide-react"
 import PropertyCard from "@/components/user/common/propertcard"
 import { PublicPropertyListItem } from "@/lib/queries/properties"
+import { cn } from "@/lib/utils"
 
 interface PropertyGridProps {
   properties: PublicPropertyListItem[]
+  className?: string
 }
 
-const PropertyGrid = ({ properties }: PropertyGridProps) => {
+const PropertyGrid = ({ properties, className }: PropertyGridProps) => {
   if (properties.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border py-24 text-center">
@@ -20,7 +22,7 @@ const PropertyGrid = ({ properties }: PropertyGridProps) => {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+    <div className={cn("grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3", className)}>
       {properties.map((property) => (
         <PropertyCard
           key={property._id}

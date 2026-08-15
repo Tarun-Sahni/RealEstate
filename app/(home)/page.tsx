@@ -1,9 +1,10 @@
-import React from 'react'
 import HeroSection from './hero'
-import PropertyCard from '@/components/user/common/propertcard'
-import { FEATURED_PROPERTIES } from '@/lib/data/featuredproperties'
+import PropertyGrid from '@/components/user/property/property-grid'
+import { getFeaturedProperties } from '@/lib/queries/properties'
 
-const Home = () => {
+const Home = async () => {
+  const featuredProperties = await getFeaturedProperties(12)
+
   return (
     <>
       <main className='min-h-screen'>
@@ -17,10 +18,8 @@ const Home = () => {
               Handpicked listings curated for their location, value and design
             </p>
           </div>
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 container mx-auto'>
-            {FEATURED_PROPERTIES.map((property) => (
-              <PropertyCard key={property.slug} {...property} />
-            ))}
+          <div className='container mx-auto'>
+            <PropertyGrid properties={featuredProperties} className='lg:grid-cols-4 xl:grid-cols-4' />
           </div>
         </section>
       </main>
