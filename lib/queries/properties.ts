@@ -1,3 +1,4 @@
+import { cache } from "react";
 import connectDB from "@/lib/database";
 import { Category, ListingType, Property, PropertyType, SubCategory } from "@/models";
 
@@ -184,7 +185,27 @@ export async function getFeaturedProperties(limit = 8): Promise<PublicPropertyLi
     return properties as unknown as PublicPropertyListItem[];
 }
 
-export async function getPropertyBySlug(slug: string): Promise<PublicPropertyDetail | null> {
+export async function getMostViewedProperties(limit = 8): Promise<PublicPropertyListItem[]> {
+    await connectDB();
+    const cappedLimit = Math.min(8, Math.max(1, limit));
+
+    const properties = await Property.find({ isActive: true })
+        .select(LIST_PROJECTION)
+        .populate("category", "name slug")
+        .populate("subcategory", "name slug")
+        .populate("listingType", "name")
+        .populate("propertyType", "name")
+        .sort({ views: -1, createdAt: -1 })
+        .limit(cappedLimit)
+        .lean();
+
+    return properties as unknown as PublicPropertyListItem[];
+}
+
+// Wrapped in React's cache() so the detail page's generateMetadata() and page
+// component — which both need this data — share one call per request instead
+// of each triggering their own $inc on `views`.
+export const getPropertyBySlug = cache(async (slug: string): Promise<PublicPropertyDetail | null> => {
     await connectDB();
 
     // Atomic increment avoids a separate read-then-write round trip.
@@ -200,7 +221,7 @@ export async function getPropertyBySlug(slug: string): Promise<PublicPropertyDet
         .lean();
 
     return property as unknown as PublicPropertyDetail | null;
-}
+});
 
 export async function getPublicCategories() {
     await connectDB();

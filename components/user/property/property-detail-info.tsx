@@ -10,6 +10,7 @@ import {
   Phone,
   User,
   CircleCheckBig,
+  Eye,
 } from "lucide-react"
 import {
   Accordion,
@@ -89,12 +90,20 @@ const PropertyDetailInfo = ({ property }: { property: PublicPropertyDetail }) =>
           )}
         </div>
         <h1 className="font-playfair text-2xl font-bold md:text-3xl">{property.title}</h1>
-        {location && (
-          <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
-            <MapPin size={15} className="text-yellow-500" />
-            {location}
-          </p>
-        )}
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+          {location && (
+            <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <MapPin size={15} className="text-yellow-500" />
+              {location}
+            </p>
+          )}
+          {typeof property.views === "number" && (
+            <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+              <Eye size={15} className="text-yellow-500" />
+              {property.views.toLocaleString("en-IN")} {property.views === 1 ? "view" : "views"}
+            </p>
+          )}
+        </div>
         <div className="flex items-baseline gap-2 pt-1">
           <span className="font-playfair text-3xl font-bold text-foreground">
             {formatPrice(property.price)}

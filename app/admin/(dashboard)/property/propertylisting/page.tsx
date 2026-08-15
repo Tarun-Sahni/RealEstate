@@ -20,7 +20,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import axios, { AxiosError } from "axios"
-import { PlusCircle } from "lucide-react"
+import { Eye, PlusCircle } from "lucide-react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useCallback, useEffect, useState } from "react"
@@ -34,6 +34,7 @@ interface PropertyItem {
   listingType?: { name: string };
   propertyType?: { name: string };
   price: number;
+  views: number;
   isFeatured: boolean;
   isActive: boolean;
   createdAt: string;
@@ -120,6 +121,7 @@ const PropertyListing = () => {
             <TableHead className="text-center">Listing Type</TableHead>
             <TableHead className="text-center">Property Type</TableHead>
             <TableHead className="text-center">Price</TableHead>
+            <TableHead className="text-center">Views</TableHead>
             <TableHead className="text-center">Status</TableHead>
             <TableHead className="text-center">Created At</TableHead>
             <TableHead className="text-right">Action</TableHead>
@@ -128,13 +130,13 @@ const PropertyListing = () => {
         <TableBody>
           {loading ? (
             <TableRow>
-              <TableCell colSpan={9} className="text-center text-muted-foreground">
+              <TableCell colSpan={10} className="text-center text-muted-foreground">
                 Loading...
               </TableCell>
             </TableRow>
           ) : properties.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={9} className="text-center text-muted-foreground">
+              <TableCell colSpan={10} className="text-center text-muted-foreground">
                 No properties yet.
               </TableCell>
             </TableRow>
@@ -147,6 +149,12 @@ const PropertyListing = () => {
                 <TableCell className="text-center">{property.listingType?.name ?? "-"}</TableCell>
                 <TableCell className="text-center">{property.propertyType?.name ?? "-"}</TableCell>
                 <TableCell className="text-center">{property.price?.toLocaleString("en-IN")}</TableCell>
+                <TableCell className="text-center">
+                  <span className="inline-flex items-center justify-center gap-1.5 text-muted-foreground">
+                    <Eye size={14} />
+                    {(property.views ?? 0).toLocaleString("en-IN")}
+                  </span>
+                </TableCell>
                 <TableCell className="text-center space-x-1">
                   <Badge variant={property.isActive ? "default" : "secondary"} className="tracking-wider">
                     {property.isActive ? "Active" : "Inactive"}
