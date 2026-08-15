@@ -1,4 +1,5 @@
 import HeroSection from './hero'
+import CtaBanner from './cta-banner'
 import PropertyGrid from '@/components/user/property/property-grid'
 import { getFeaturedProperties } from '@/lib/queries/properties'
 
@@ -22,6 +23,7 @@ const Home = async () => {
             <PropertyGrid properties={featuredProperties} className='lg:grid-cols-4 xl:grid-cols-4' />
           </div>
         </section>
+        <CtaBanner />
       </main>
     </>
   )
