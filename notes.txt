@@ -1,3 +1,28 @@
 https://www.figma.com/design/Q7guDGeryILctfMRdttJLf/75--Real-Estate-Landing-website-templates--Community-?node-id=6104-1452&t=A5oQteQCBfImjBtb-0
 
 https://www.figma.com/design/dQ98rKfYLZ31sAK23gfpzu/Real-Estate-Business-Website-UI-Template---Dark-Theme-%7C-Produce-UI--Community-?node-id=45-2&p=f&t=EDcWc652Rl6ncAS9-0
+
+app/(home)/properties/
+  page.tsx                              # all listings + query-param filters (?category=&subcategory=&listingType=&propertyType=&city=&minPrice=&maxPrice=&search=&page=)
+  [slug]/page.tsx                       # property detail page (Property.slug is globally unique — good for a flat URL)
+  category/[categorySlug]/page.tsx      # properties in one category
+  category/[categorySlug]/[subcategorySlug]/page.tsx   # properties in one subcategory
+Public API (app/api/, read-only, mirrors your existing admin routes but scoped to isActive: true)
+
+
+app/api/properties/route.ts            # GET list with filters/pagination
+app/api/properties/[slug]/route.ts     # GET one (also $inc views here)
+app/api/categories/route.ts            # GET active categories (for nav/mega-menu)
+app/api/categories/[categorySlug]/subcategories/route.ts   # GET subcategories for a category
+Components (components/user/property/)
+
+
+property-card.tsx
+property-grid.tsx
+property-filters.tsx        # sidebar/topbar: category, subcategory, price, bed/bath, listingType
+category-nav.tsx            # category/subcategory pills or dropdown, used on header + listing pages
+property-gallery.tsx        # images/floorPlanImages carousel for detail page
+property-detail-info.tsx    # price, configs, amenities, faqs, contact block
+One thing to watch: SubCategory.slug is not unique on its own (only Category.slug is) — two categories could each have a subcategory slugged "luxury". That's why the subcategory route is nested under [categorySlug] rather than flat; when you query, resolve Category by slug first, then SubCategory by { category: category._id, slug: subcategorySlug }.
+
+Want me to scaffold these files (pages + API routes + a basic property-card) now, or just the API layer first?
