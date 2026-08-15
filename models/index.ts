@@ -9,5 +9,6 @@ import {Favorite} from "@/models/favorite";
 import {VisitBooking} from "@/models/visitbooking";
 import {TeamMember} from "@/models/teammember";
 import {SiteSettings} from "@/models/sitesettings";
+import {Testimonial} from "@/models/testimonial";
 
-export {User,ContactUs,Category,SubCategory,ListingType,PropertyType,Property,Favorite,VisitBooking,TeamMember,SiteSettings};
+export {User,ContactUs,Category,SubCategory,ListingType,PropertyType,Property,Favorite,VisitBooking,TeamMember,SiteSettings,Testimonial};

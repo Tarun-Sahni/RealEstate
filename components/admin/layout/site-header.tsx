@@ -26,6 +26,7 @@ const routeLabels: Record<string, string> = {
   inquiry: "Inquiry",
   visitbooking: "Tour Requests",
   teammember: "Team Members",
+  testimonial: "Testimonials",
   settings: "Settings",
   add: "Add Property",
   view: "View Property",

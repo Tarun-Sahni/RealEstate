@@ -1,7 +1,7 @@
 import connectDB from "@/lib/database";
 import { getAdminUser } from "@/lib/dal";
 import imagekit from "@/lib/imagekit";
-import { TeamMember } from "@/models";
+import { Testimonial } from "@/models";
 import { NextRequest, NextResponse } from "next/server";
 
 const isUploadedFile = (value: FormDataEntryValue | null): value is File =>
@@ -12,7 +12,7 @@ const uploadPhoto = async (file: File) => {
     const uploadResponse = await imagekit.upload({
         file: buffer,
         fileName: `${Date.now()}-${file.name}`,
-        folder: "/team",
+        folder: "/testimonials",
     });
     return { url: uploadResponse.url, fileId: uploadResponse.fileId };
 };
@@ -28,9 +28,9 @@ export async function POST(request: NextRequest) {
             }, { status: 400 })
         }
 
-        const { name, designation } = JSON.parse(dataRaw.toString());
-        const photoFile = formData.get("photoFile");
-        if (!name || !designation || !isUploadedFile(photoFile)) {
+        const { name, designation, rating, message } = JSON.parse(dataRaw.toString());
+        const ratingNumber = Number(rating);
+        if (!name || !designation || !message || !ratingNumber || ratingNumber < 1 || ratingNumber > 5) {
             return NextResponse.json({
                 success: false,
                 message: "Missing Required Fields."
@@ -46,13 +46,28 @@ export async function POST(request: NextRequest) {
             }, { status: 401 })
         }
 
-        const { url: photo, fileId: photoFileId } = await uploadPhoto(photoFile);
-        const teamMember = await TeamMember.create({ name, designation, photo, photoFileId });
+        const photoFile = formData.get("photoFile");
+        let photo = "";
+        let photoFileId: string | undefined;
+        if (isUploadedFile(photoFile)) {
+            const uploaded = await uploadPhoto(photoFile);
+            photo = uploaded.url;
+            photoFileId = uploaded.fileId;
+        }
+
+        const testimonial = await Testimonial.create({
+            name,
+            designation,
+            rating: ratingNumber,
+            message,
+            photo,
+            photoFileId,
+        });
 
         return NextResponse.json({
             success: true,
-            message: "Team member added successfully.",
-            teamMember
+            message: "Testimonial added successfully.",
+            testimonial
         }, { status: 201 })
     } catch (error) {
         return NextResponse.json({
@@ -78,15 +93,15 @@ export async function GET(request: NextRequest) {
         const limit = Math.min(100, Math.max(1, Number(searchParams.get("limit")) || 10));
         const skip = (page - 1) * limit;
 
-        const [teamMembers, total] = await Promise.all([
-            TeamMember.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
-            TeamMember.countDocuments(),
+        const [testimonials, total] = await Promise.all([
+            Testimonial.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
+            Testimonial.countDocuments(),
         ]);
 
         return NextResponse.json({
             success: true,
-            message: "Team members fetched successfully.",
-            teamMembers,
+            message: "Testimonials fetched successfully.",
+            testimonials,
             pagination: {
                 page,
                 limit,

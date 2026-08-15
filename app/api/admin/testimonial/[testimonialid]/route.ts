@@ -1,7 +1,7 @@
 import connectDB from "@/lib/database";
 import { getAdminUser } from "@/lib/dal";
 import imagekit from "@/lib/imagekit";
-import { TeamMember } from "@/models";
+import { Testimonial } from "@/models";
 import { NextRequest, NextResponse } from "next/server";
 
 const isUploadedFile = (value: FormDataEntryValue | null): value is File =>
@@ -12,7 +12,7 @@ const uploadPhoto = async (file: File) => {
     const uploadResponse = await imagekit.upload({
         file: buffer,
         fileName: `${Date.now()}-${file.name}`,
-        folder: "/team",
+        folder: "/testimonials",
     });
     return { url: uploadResponse.url, fileId: uploadResponse.fileId };
 };
@@ -26,10 +26,10 @@ const deletePhoto = async (fileId?: string) => {
     }
 };
 
-export async function PATCH(request: NextRequest, { params }: { params: Promise<{ teammemberid: string }> }) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ testimonialid: string }> }) {
     try {
-        const { teammemberid } = await params;
-        if (!teammemberid) {
+        const { testimonialid } = await params;
+        if (!testimonialid) {
             return NextResponse.json({
                 success: false,
                 message: "Missing Required Fields."
@@ -45,8 +45,9 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
             }, { status: 400 })
         }
 
-        const { name, designation, isActive } = JSON.parse(dataRaw.toString());
-        if (!name || !designation) {
+        const { name, designation, rating, message, isActive } = JSON.parse(dataRaw.toString());
+        const ratingNumber = Number(rating);
+        if (!name || !designation || !message || !ratingNumber || ratingNumber < 1 || ratingNumber > 5) {
             return NextResponse.json({
                 success: false,
                 message: "Missing Required Fields."
@@ -62,26 +63,32 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
             }, { status: 401 })
         }
 
-        const update: Record<string, unknown> = { name, designation, isActive: Boolean(isActive) };
+        const update: Record<string, unknown> = {
+            name,
+            designation,
+            rating: ratingNumber,
+            message,
+            isActive: Boolean(isActive),
+        };
 
         const photoFile = formData.get("photoFile");
         let previousPhotoFileId: string | undefined;
         if (isUploadedFile(photoFile)) {
-            const existing = await TeamMember.findById(teammemberid);
+            const existing = await Testimonial.findById(testimonialid);
             previousPhotoFileId = existing?.photoFileId;
             const { url, fileId } = await uploadPhoto(photoFile);
             update.photo = url;
             update.photoFileId = fileId;
         }
 
-        const teamMember = await TeamMember.findByIdAndUpdate(teammemberid, update, {
+        const testimonial = await Testimonial.findByIdAndUpdate(testimonialid, update, {
             new: true,
             runValidators: true,
         });
-        if (!teamMember) {
+        if (!testimonial) {
             return NextResponse.json({
                 success: false,
-                message: "Team member not found."
+                message: "Testimonial not found."
             }, { status: 404 })
         }
 
@@ -91,8 +98,8 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
         return NextResponse.json({
             success: true,
-            message: "Team member updated successfully.",
-            teamMember
+            message: "Testimonial updated successfully.",
+            testimonial
         }, { status: 200 })
     } catch (error) {
         return NextResponse.json({
@@ -102,10 +109,10 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: Promise<{ teammemberid: string }> }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ testimonialid: string }> }) {
     try {
-        const { teammemberid } = await params;
-        if (!teammemberid) {
+        const { testimonialid } = await params;
+        if (!testimonialid) {
             return NextResponse.json({
                 success: false,
                 message: "Missing Required Fields."
@@ -121,19 +128,19 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
             }, { status: 401 })
         }
 
-        const teamMember = await TeamMember.findByIdAndDelete(teammemberid);
-        if (!teamMember) {
+        const testimonial = await Testimonial.findByIdAndDelete(testimonialid);
+        if (!testimonial) {
             return NextResponse.json({
                 success: false,
-                message: "Team member not found."
+                message: "Testimonial not found."
             }, { status: 404 })
         }
 
-        await deletePhoto(teamMember.photoFileId);
+        await deletePhoto(testimonial.photoFileId);
 
         return NextResponse.json({
             success: true,
-            message: "Team member deleted successfully."
+            message: "Testimonial deleted successfully."
         }, { status: 200 })
     } catch (error) {
         return NextResponse.json({
