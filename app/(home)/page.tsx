@@ -4,7 +4,7 @@ import PropertyGrid from '@/components/user/property/property-grid'
 import { getFeaturedProperties } from '@/lib/queries/properties'
 
 const Home = async () => {
-  const featuredProperties = await getFeaturedProperties(12)
+  const featuredProperties = await getFeaturedProperties(8)
 
   return (
     <>

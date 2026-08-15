@@ -9,7 +9,7 @@ import {
   Maximize,
   MapPin,
   Heart,
-  ArrowRight,
+  Building2,
   Star,
   ChevronLeft,
   ChevronRight,
@@ -112,6 +112,13 @@ const CarouselDots = ({ count }: { count: number }) => {
   )
 }
 
+const StatPill = ({ icon: Icon, children }: { icon: React.ElementType; children: React.ReactNode }) => (
+  <span className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1.5 text-xs font-medium text-foreground">
+    <Icon size={13} className="shrink-0 text-yellow-500" />
+    {children}
+  </span>
+)
+
 const PropertyCard = ({
   slug,
   title,
@@ -137,11 +144,11 @@ const PropertyCard = ({
     <Link
       href={`/properties/${slug}`}
       className={cn(
-        "group relative flex flex-col overflow-hidden rounded-2xl bg-card ring-1 ring-foreground/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10 dark:hover:shadow-black/30",
+        "group relative flex flex-col gap-4 rounded-2xl bg-card p-3 ring-1 ring-foreground/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/10 dark:hover:shadow-black/30",
         className
       )}
     >
-      <div className="relative aspect-4/3 w-full overflow-hidden bg-muted">
+      <div className="relative aspect-4/3 w-full overflow-hidden rounded-xl bg-muted">
         {slides.length > 0 ? (
           <Carousel className="h-full" opts={{ loop: true }}>
             <CarouselContent className="ml-0 h-full">
@@ -204,26 +211,11 @@ const PropertyCard = ({
             )}
           />
         </button>
-
-        {propertyType && (
-          <span className="pointer-events-none absolute bottom-3 left-3 z-10 inline-flex items-center rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-medium text-black dark:bg-black/60 dark:text-white">
-            {propertyType}
-          </span>
-        )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-3 p-4">
-        <div className="flex items-baseline justify-between gap-2">
-          <p className="font-playfair text-xl font-bold text-foreground">
-            {formatPrice(price)}
-          </p>
-          {priceLabel && (
-            <span className="text-xs text-muted-foreground">{priceLabel}</span>
-          )}
-        </div>
-
+      <div className="flex flex-1 flex-col gap-3 px-1 pb-1">
         <div className="flex flex-col gap-1">
-          <h3 className="line-clamp-1 font-medium tracking-wide text-foreground transition-colors group-hover:text-yellow-500">
+          <h3 className="line-clamp-1 font-playfair text-lg font-bold text-foreground transition-colors group-hover:text-yellow-500">
             {title}
           </h3>
           {location && (
@@ -234,37 +226,33 @@ const PropertyCard = ({
           )}
         </div>
 
-        {(bedrooms || bathrooms || area?.value) && (
-          <div className="flex items-center gap-4 border-t border-border pt-3 text-xs text-muted-foreground">
+        {(bedrooms || bathrooms || area?.value || propertyType) && (
+          <div className="flex flex-wrap items-center gap-2">
             {typeof bedrooms === "number" && bedrooms > 0 && (
-              <span className="flex items-center gap-1.5">
-                <BedDouble size={14} className="text-yellow-500" />
-                {bedrooms} Bed
-              </span>
+              <StatPill icon={BedDouble}>{bedrooms}-Bedroom</StatPill>
             )}
             {typeof bathrooms === "number" && bathrooms > 0 && (
-              <span className="flex items-center gap-1.5">
-                <Bath size={14} className="text-yellow-500" />
-                {bathrooms} Bath
-              </span>
+              <StatPill icon={Bath}>{bathrooms}-Bathroom</StatPill>
             )}
             {area?.value && (
-              <span className="flex items-center gap-1.5">
-                <Maximize size={14} className="text-yellow-500" />
-                {area.value} {area.unit ?? "sqft"}
-              </span>
+              <StatPill icon={Maximize}>{area.value} {area.unit ?? "sqft"}</StatPill>
             )}
+            {propertyType && <StatPill icon={Building2}>{propertyType}</StatPill>}
           </div>
         )}
 
-        <div className="mt-auto flex items-center justify-between pt-1 text-sm font-medium text-foreground">
-          <span className="opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+        <div className="mt-auto flex items-end justify-between gap-3 border-t border-border pt-3">
+          <div className="flex flex-col">
+            <span className="text-xs text-muted-foreground">
+              Price{priceLabel ? ` · ${priceLabel}` : ""}
+            </span>
+            <span className="font-playfair text-lg font-bold text-foreground">
+              {formatPrice(price)}
+            </span>
+          </div>
+          <span className="inline-flex shrink-0 items-center justify-center rounded-full bg-yellow-500 px-4 py-2 text-xs font-semibold text-black transition-colors group-hover:bg-yellow-400 sm:px-5 sm:text-sm">
             View Details
           </span>
-          <ArrowRight
-            size={16}
-            className="ml-auto text-yellow-500 transition-transform duration-300 group-hover:translate-x-1"
-          />
         </div>
       </div>
     </Link>

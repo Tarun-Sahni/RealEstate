@@ -167,9 +167,9 @@ export async function getPublicProperties(filters: PropertyListFilters) {
     };
 }
 
-export async function getFeaturedProperties(limit = 12): Promise<PublicPropertyListItem[]> {
+export async function getFeaturedProperties(limit = 8): Promise<PublicPropertyListItem[]> {
     await connectDB();
-    const cappedLimit = Math.min(12, Math.max(1, limit));
+    const cappedLimit = Math.min(8, Math.max(1, limit));
 
     const properties = await Property.find({ isActive: true, isFeatured: true })
         .select(LIST_PROJECTION)
