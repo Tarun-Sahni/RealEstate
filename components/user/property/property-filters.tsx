@@ -312,10 +312,10 @@ const PropertyFilters = ({
         )}
       </div>
 
-      {/* Desktop sidebar */}
+      {/* Desktop sidebar — sticks just below the fixed header + sticky category nav */}
       <form
         onSubmit={handleSubmit}
-        className="sticky top-24 hidden max-h-[calc(100vh-7rem)] flex-col gap-5 overflow-y-auto rounded-2xl bg-card p-5 ring-1 ring-foreground/10 lg:flex"
+        className="sticky top-30.25 hidden max-h-[calc(100vh-121px-1.5rem)] flex-col gap-5 overflow-y-auto rounded-2xl bg-card p-5 ring-1 ring-foreground/10 lg:flex"
       >
         <div className="flex items-center justify-between">
           <h3 className="font-playfair text-lg font-semibold">Filters</h3>

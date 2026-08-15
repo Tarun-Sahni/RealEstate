@@ -124,7 +124,7 @@ const SubcategoryPage = async ({
 
         <CategoryNav categories={categories} />
 
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+        <div className="flex flex-col gap-6 lg:flex-row">
           <aside className="lg:w-72 lg:shrink-0">
             <PropertyFilters
               categories={categories}

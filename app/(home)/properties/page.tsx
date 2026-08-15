@@ -64,7 +64,7 @@ const PropertiesPage = async ({ searchParams }: { searchParams: Promise<SearchPa
   return (
     <main className="min-h-screen px-4 pt-24 pb-16 md:pt-28">
       <div className="container mx-auto flex flex-col gap-6">
-        <Breadcrumb>
+        {/* <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
@@ -76,20 +76,20 @@ const PropertiesPage = async ({ searchParams }: { searchParams: Promise<SearchPa
               <BreadcrumbPage>Properties</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </Breadcrumb>
+        </Breadcrumb> */}
 
-        <div className="flex flex-col gap-2">
+        <div className="flex justify-between items-center flex-wrap gap-2">
           <h1 className="font-playfair text-3xl font-bold md:text-4xl">
             Explore Properties
           </h1>
           <p className="text-sm text-muted-foreground md:text-base">
-            {pagination.total} propert{pagination.total === 1 ? "y" : "ies"} available across Gurgaon
+            {pagination.total} propert{pagination.total === 1 ? "y" : "ies"} available
           </p>
         </div>
 
         <CategoryNav categories={categories} />
 
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+        <div className="flex flex-col gap-6 lg:flex-row">
           <aside className="lg:w-72 lg:shrink-0">
             <PropertyFilters
               categories={categories}
