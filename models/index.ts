@@ -7,5 +7,7 @@ import {PropertyType} from "@/models/property/propertytype";
 import {Property} from "@/models/property/property";
 import {Favorite} from "@/models/favorite";
 import {VisitBooking} from "@/models/visitbooking";
+import {TeamMember} from "@/models/teammember";
+import {SiteSettings} from "@/models/sitesettings";
 
-export {User,ContactUs,Category,SubCategory,ListingType,PropertyType,Property,Favorite,VisitBooking};
+export {User,ContactUs,Category,SubCategory,ListingType,PropertyType,Property,Favorite,VisitBooking,TeamMember,SiteSettings};

@@ -8,8 +8,11 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
+import { getTeamMembers } from "@/lib/queries/team";
 
-const About = () => {
+const About = async () => {
+    const teamMembers = await getTeamMembers();
+
     return (
         <div className="min-h-screen mt-9 md:my-18 container mx-auto py-16 px-4 space-y-16 md:space-y-32">
             {/* Our Journey */}
@@ -114,33 +117,38 @@ const About = () => {
                 </div>
             </div>
             {/* Our Team */}
-            <div className="container mx-auto space-y-12">
-                <div className="flex flex-col items-center">
-                    <DesignOne />
-                    <h1 className="text-4xl md:text-7xl font-playfair text-center lg:text-start">Meet Our Team</h1>
-                    <p className="tracking-wider font-inter max-w-3xl text-muted-foreground text-center text-sm md:text-base">Our story is one of continuous growth and evolution. We started as a small team with big dreams, determined to create a real estate platform that transcended the ordinary.</p>
+            {teamMembers.length > 0 && (
+                <div className="container mx-auto space-y-12">
+                    <div className="flex flex-col items-center">
+                        <DesignOne />
+                        <h1 className="text-4xl md:text-7xl font-playfair text-center lg:text-start">Meet Our Team</h1>
+                        <p className="tracking-wider font-inter max-w-3xl text-muted-foreground text-center text-sm md:text-base">Our story is one of continuous growth and evolution. We started as a small team with big dreams, determined to create a real estate platform that transcended the ordinary.</p>
+                    </div>
+                    <Carousel className="w-full">
+                        <CarouselContent>
+                            {teamMembers.map((member) => (
+                                <CarouselItem key={member._id} className="basis-1/2 lg:basis-1/4">
+                                    <div className="w-full border p-4 rounded-md space-y-4">
+                                        <Image
+                                            src={member.photo}
+                                            alt={member.name}
+                                            width={500}
+                                            height={500}
+                                            className="aspect-square w-full rounded-md object-cover"
+                                        />
+                                        <div className="px-2 text-center">
+                                            <p className="font-playfair text-lg capitalize">{member.name}</p>
+                                            <p className="text-xs tracking-wider text-yellow-500 uppercase font-semibold">{member.designation}</p>
+                                        </div>
+                                    </div>
+                                </CarouselItem>
+                            ))}
+                        </CarouselContent>
+                        <CarouselPrevious />
+                        <CarouselNext />
+                    </Carousel>
                 </div>
-                <Carousel className="w-full">
-                    <CarouselContent>
-                        {Array.from({ length: 5 }).map((_, index) => (
-                            <CarouselItem key={index} className="basis-1/2 lg:basis-1/4">
-                                <div className="w-full border p-4 rounded-md space-y-4">
-                                    <Image
-                                    src="/placeholder.svg"
-                                    alt="image"
-                                    width={500}
-                                    height={500}
-                                    className="rounded-md"
-                                    />
-                                    <p className="px-2 text-center">John Doe</p>
-                                </div>
-                            </CarouselItem>
-                        ))}
-                    </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
-                </Carousel>
-            </div>
+            )}
         </div>
     );
 };

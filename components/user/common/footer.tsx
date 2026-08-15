@@ -3,8 +3,17 @@ import Link from 'next/link'
 import { ArrowRight, Dot } from 'lucide-react'
 import { MAIL, TELEPHONE } from '@/lib/contant'
 import { FaFacebook, FaInstagram, FaWhatsapp, FaYoutube } from 'react-icons/fa6'
+import { getSiteSettings } from '@/lib/queries/settings'
 
-const Footer = () => {
+const Footer = async () => {
+  const settings = await getSiteSettings();
+  const phone = settings.phone || TELEPHONE;
+  const supportEmail = settings.supportEmail || settings.email || MAIL;
+  const facebookHref = settings.facebook || "https://facebook.com";
+  const instagramHref = settings.instagram || "https://instagram.com";
+  const youtubeHref = settings.youtube || "https://youtube.com";
+  const whatsappHref = settings.whatsappNumber ? `https://wa.me/${settings.whatsappNumber}` : "https://wa.me/919999999999";
+
   return (
     <footer className='w-full bg-neutral-900 px-4'>
       <div className='max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 items-stretch pt-16 pb-8 gap-8'>
@@ -16,39 +25,39 @@ const Footer = () => {
           <div className='flex flex-col md:flex-row gap-4'>
             <div className='flex flex-col justify-center items-start gap-1'>
               <h2 className='text-gray-500 text-xl font-playfair tracking-wider'>Customer Care</h2>
-              <Link href={`tel: ${TELEPHONE}`} className='text-sm hover:underline tracking-wider text-white hover:text-yellow-600 hover:dark:text-yellow-500'>{TELEPHONE}</Link>
+              <Link href={`tel: ${phone}`} className='text-sm hover:underline tracking-wider text-white hover:text-yellow-600 hover:dark:text-yellow-500'>{phone}</Link>
             </div>
             <div className='flex flex-col justify-center items-start gap-1'>
               <h2 className='text-gray-500 text-xl font-playfair tracking-wider'>Live Support</h2>
-              <Link href={`mailto: ${MAIL}`} className='text-sm text-white hover:underline tracking-wider hover:text-yellow-600 hover:dark:text-yellow-500'>{MAIL}</Link>
+              <Link href={`mailto: ${supportEmail}`} className='text-sm text-white hover:underline tracking-wider hover:text-yellow-600 hover:dark:text-yellow-500'>{supportEmail}</Link>
             </div>
           </div>
           <div className='flex flex-col gap-4'>
             <h2 className='text-muted-foreground tracking-wider font-playfair text-xl'>Follow Us on Social Media</h2>
             <div className="flex items-center justify-start gap-5">
               <Link
-                href="https://facebook.com"
+                href={facebookHref}
                 target="_blank"
                 className="text-white hover:text-[#1877F2] dark:hover:text-[#1877F2] transition-colors"
               >
                 <FaFacebook className="size-6" />
               </Link>
               <Link
-                href="https://instagram.com"
+                href={instagramHref}
                 target="_blank"
                 className="text-white hover:text-[#E4405F] dark:hover:text-[#E4405F] transition-colors"
               >
                 <FaInstagram className="size-6" />
               </Link>
               <Link
-                href="https://youtube.com"
+                href={youtubeHref}
                 target="_blank"
                 className="text-white hover:text-[#FF0000] dark:hover:text-[#FF0000] transition-colors"
               >
                 <FaYoutube className="size-7" />
               </Link>
               <Link
-                href="https://wa.me/919999999999"
+                href={whatsappHref}
                 target="_blank"
                 className="text-white hover:text-[#25D366] dark:hover:text-[#25D366] transition-colors"
               >

@@ -1,72 +1,31 @@
-"use client"
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { BadgeCheckIcon, CalendarDays, Clock8, Mail, MapPinHouse, MessageCircle, Phone } from 'lucide-react'
 import { MAIL, OFFICE_CLOSING_TIME, OFFICE_START_TIIME, OFFICE_WEEK_DAYS, TELEPHONE } from '@/lib/contant'
-import axios, { AxiosError } from 'axios'
-import { BadgeCheckIcon, CalendarDays, Clock8, Loader2, Mail, MapPinHouse, MessageCircle, Phone } from 'lucide-react'
-import { useState } from 'react'
-import { toast } from 'sonner'
+import { getSiteSettings } from '@/lib/queries/settings'
+import ContactForm from './contact-form'
 
-const ContactUs = () => {
-  const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({
-    firstname: "",
-    lastname: "",
-    email: "",
-    phone: "",
-    message: ""
-  })
+const DEFAULT_MAP_EMBED_URL = "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3506.0702478452067!2d77.01455728!3d28.50753414!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1954f11df7c5%3A0x90e93daf0ec6634f!2sGURGAON%20ELITE%20ESTATE%20%3A%20Property%20Dealer%20Sector%20110%20Gurgaon!5e0!3m2!1sen!2sin!4v1782041501310!5m2!1sen!2sin"
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value
-    })
-  }
+const ContactUs = async () => {
+  const settings = await getSiteSettings();
+  const phone = settings.phone || TELEPHONE;
+  const email = settings.email || MAIL;
+  const officeHours = settings.officeHours || `${OFFICE_WEEK_DAYS} ${OFFICE_START_TIIME}-${OFFICE_CLOSING_TIME}`;
+  const mapEmbedUrl = settings.mapEmbedUrl || DEFAULT_MAP_EMBED_URL;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      setLoading(true);
-      if (isNaN(Number(form.phone)) || form.phone.length !== 10) {
-        toast.error("Invalid Number")
-      }
-      const response = await axios.post("/api/user/contactus",form)
-      if (response?.data?.success) {
-        toast.success(response?.data?.message)
-      }
-
-    } catch (error) {
-      const err = error as AxiosError<any>;
-      const message = err.response?.data?.message || err.message || "Something went wrong";
-      toast.error(message);
-    } finally {
-      setLoading(false);
-      setForm({
-        firstname: "",
-        lastname: "",
-        email: "",
-        phone: "",
-        message: ""
-      })
-    }
-  }
   return (
     <main className="min-h-screen mt-18 max-w-7xl mx-auto py-8 flex flex-col lg:flex-row justify-between px-4">
       <aside className='h-full border lg:w-1/3 flex flex-col gap-6 p-4 rounded-2xl shadow-xl'>
         <Badge variant="default">Contact Us</Badge>
         <h1 className='text-2xl md:text-4xl font-playfair'>Let's find your next home together.</h1>
-        <p className='tracking-wider'>Whether you're buying, selling or just exploring the market, our team is ready to guide you with expert advice and personlized support.</p>
+        <p className='tracking-wider font-inter'>Whether you're buying, selling or just exploring the market, our team is ready to guide you with expert advice and personlized support.</p>
         <div className='flex flex-row items-center justify-start gap-2 border-2 border-r-yellow-500 border-l-yellow-500 p-4 rounded-xl'>
           <div className='w-12 h-12 bg-yellow-500 rounded-lg flex flex-row justify-center items-center'>
             <Phone />
           </div>
           <div className='flex flex-col justify-center items-start gap-0'>
             <p className='font-playfair text-xl'>Call Us</p>
-            <p className='text-xs tracking-wider'>{TELEPHONE}</p>
+            <p className='text-xs tracking-wider'>{phone}</p>
           </div>
         </div>
         <div className='flex flex-row items-center justify-start gap-2 border-2 border-r-yellow-500 border-l-yellow-500 p-4 rounded-xl'>
@@ -75,7 +34,7 @@ const ContactUs = () => {
           </div>
           <div className='flex flex-col justify-center items-start gap-0'>
             <p className='font-playfair text-xl'>Email</p>
-            <p className='text-xs tracking-wider'>{MAIL}</p>
+            <p className='text-xs tracking-wider'>{email}</p>
           </div>
         </div>
         <div className='flex flex-col items-start justify-start gap-2 border-2 border-r-yellow-500 border-l-yellow-500 p-4 rounded-xl'>
@@ -83,12 +42,15 @@ const ContactUs = () => {
             <MapPinHouse />
             <p className='font-playfair text-xl'>Visit Us</p>
           </div>
-          <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3506.0702478452067!2d77.01455728!3d28.50753414!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1954f11df7c5%3A0x90e93daf0ec6634f!2sGURGAON%20ELITE%20ESTATE%20%3A%20Property%20Dealer%20Sector%20110%20Gurgaon!5e0!3m2!1sen!2sin!4v1782041501310!5m2!1sen!2sin" loading="lazy" className='w-full h-52 rounded-xl'></iframe>
+          {settings.officeAddress && (
+            <p className='text-xs tracking-wider text-muted-foreground'>{settings.officeAddress}</p>
+          )}
+          <iframe src={mapEmbedUrl} loading="lazy" className='w-full h-52 rounded-xl'></iframe>
         </div>
         <div className='rounded-xl p-4 flex flex-row justify-between items-center bg-yellow-500/5 border border-yellow-500'>
           <div className='flex flex-col gap-2'>
             <p className='font-playfair text-xl text-yellow-500'>Office Hours</p>
-            <p className='text-yellow-500'>{OFFICE_WEEK_DAYS} {OFFICE_START_TIIME}-{OFFICE_CLOSING_TIME}</p>
+            <p className='text-yellow-500'>{officeHours}</p>
           </div>
           <Clock8 />
         </div>
@@ -99,64 +61,7 @@ const ContactUs = () => {
             <h2 className='text-3xl md:text-5xl font-playfair'>Send us a message</h2>
             <p className='text-sm tracking-wider text-muted-foreground'>Tell us what you're looking for and we'll get back to you shortly.</p>
           </div>
-          <form onSubmit={handleSubmit} className='flex flex-col gap-6'>
-            <div className='flex flex-col md:flex-row gap-4'>
-              <div className='flex flex-col gap-3 w-full'>
-                <Label>First Name</Label>
-                <Input
-                  name="firstname"
-                  value={form.firstname}
-                  onChange={handleChange}
-                  placeholder='First Name'
-                  className='py-5 rounded bg-white dark:bg-muted'
-                />
-              </div>
-              <div className='flex flex-col gap-3 w-full'>
-                <Label>Last Name</Label>
-                <Input
-                  name="lastname"
-                  value={form.lastname}
-                  onChange={handleChange}
-                  placeholder='Last Name'
-                  className='py-5 rounded bg-white dark:bg-muted'
-                />
-              </div>
-            </div>
-            <div className='flex flex-col gap-3 w-full'>
-              <Label>Email</Label>
-              <Input
-                name="email"
-                value={form.email}
-                onChange={handleChange}
-                placeholder='Email'
-                className='py-5 rounded bg-white dark:bg-muted'
-              />
-            </div>
-            <div className='flex flex-col gap-3 w-full'>
-              <Label>Phone Number</Label>
-              <Input
-                name="phone"
-                value={form.phone}
-                onChange={handleChange}
-                placeholder='Phone Number'
-                className='py-5 rounded bg-white dark:bg-muted'
-              />
-            </div>
-            <div className='flex flex-col gap-3 w-full'>
-              <Label>How can we help?</Label>
-              <Textarea
-                name="message"
-                value={form.message}
-                onChange={handleChange}
-                rows={6}
-                placeholder='How can we help you?'
-                className='py-5 rounded min-h-40 bg-white dark:bg-muted'
-              />
-            </div>
-            <Button className='w-fit rounded-full py-2 px-5 tracking-wider cursor-pointer ml-auto' disabled={loading}>
-              {loading ? <><Loader2 className='animate-spin' /> Submitting...</> : "Submit"}
-            </Button>
-          </form>
+          <ContactForm />
         </div>
         <div className='w-full flex flex-col md:flex-row justify-between items-stretch gap-4'>
           <div className='border rounded-2xl shadow-xl flex flex-col w-full p-4 gap-4'>
