@@ -24,6 +24,7 @@ const routeLabels: Record<string, string> = {
   propertytype: "Property Type",
   propertylisting: "Property Listing",
   inquiry: "Inquiry",
+  visitbooking: "Tour Requests",
   add: "Add Property",
 }
 

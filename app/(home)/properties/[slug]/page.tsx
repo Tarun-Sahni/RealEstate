@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/breadcrumb"
 import PropertyGallery from "@/components/user/property/property-gallery"
 import PropertyDetailInfo from "@/components/user/property/property-detail-info"
+import PropertyTourForm from "@/components/user/property/property-tour-form"
 import { getPropertyBySlug } from "@/lib/queries/properties"
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
@@ -72,6 +73,7 @@ const PropertyDetailPage = async ({ params }: { params: Promise<{ slug: string }
 
         <PropertyGallery title={property.title} images={images} />
         <PropertyDetailInfo property={property} />
+        <PropertyTourForm propertyId={property._id} propertyTitle={property.title} />
       </div>
     </main>
   )

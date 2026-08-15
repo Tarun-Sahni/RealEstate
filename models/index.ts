@@ -6,5 +6,6 @@ import {ListingType} from "@/models/property/listingtype";
 import {PropertyType} from "@/models/property/propertytype";
 import {Property} from "@/models/property/property";
 import {Favorite} from "@/models/favorite";
+import {VisitBooking} from "@/models/visitbooking";
 
-export {User,ContactUs,Category,SubCategory,ListingType,PropertyType,Property,Favorite};
+export {User,ContactUs,Category,SubCategory,ListingType,PropertyType,Property,Favorite,VisitBooking};

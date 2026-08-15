@@ -1,6 +1,6 @@
 import { verifyAdminSession } from "@/lib/dal"
 import connectDB from "@/lib/database"
-import { ContactUs, Property, User } from "@/models"
+import { ContactUs, Property, User, VisitBooking } from "@/models"
 import { ChartAreaInteractive } from "@/components/admin/layout/chart"
 import { SectionCardItem, SectionCards } from "@/components/admin/layout/sectioncards"
 
@@ -54,23 +54,25 @@ const Home = async () => {
   const [
     totalProperties,
     activeProperties,
-    featuredProperties,
     newPropertiesThisWeek,
     totalInquiries,
     newInquiriesThisWeek,
     totalUsers,
     newUsersThisWeek,
+    totalTourRequests,
+    newTourRequestsThisWeek,
     propertyDailyRaw,
     inquiryDailyRaw,
   ] = await Promise.all([
     Property.countDocuments(),
     Property.countDocuments({ isActive: true }),
-    Property.countDocuments({ isFeatured: true }),
     Property.countDocuments({ createdAt: { $gte: sevenDaysAgo } }),
     ContactUs.countDocuments(),
     ContactUs.countDocuments({ createdAt: { $gte: sevenDaysAgo } }),
     User.countDocuments({ role: { $ne: "ADMIN" } }),
     User.countDocuments({ role: { $ne: "ADMIN" }, createdAt: { $gte: sevenDaysAgo } }),
+    VisitBooking.countDocuments(),
+    VisitBooking.countDocuments({ createdAt: { $gte: sevenDaysAgo } }),
     Property.aggregate<DailyCount>([
       { $match: { createdAt: { $gte: activityStartDate } } },
       { $group: { _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } }, count: { $sum: 1 } } },
@@ -83,7 +85,6 @@ const Home = async () => {
 
   const activityData = buildActivitySeries(propertyDailyRaw, inquiryDailyRaw);
   const inactiveProperties = totalProperties - activeProperties;
-  const featuredShare = totalProperties ? Math.round((featuredProperties / totalProperties) * 100) : 0;
 
   const stats: SectionCardItem[] = [
     {
@@ -95,11 +96,12 @@ const Home = async () => {
       subtext: `${activeProperties} active · ${inactiveProperties} inactive`,
     },
     {
-      label: "Featured Properties",
-      value: featuredProperties,
-      badgeText: `${featuredShare}% featured`,
-      headline: `${featuredShare}% of listings are featured`,
-      subtext: `${featuredProperties} of ${totalProperties} properties`,
+      label: "Tour Requests",
+      value: totalTourRequests,
+      badgeText: newTourRequestsThisWeek > 0 ? `${newTourRequestsThisWeek} this week` : "No change",
+      positive: newTourRequestsThisWeek > 0,
+      headline: newTourRequestsThisWeek > 0 ? "Tour requests coming in this week" : "No tour requests this week",
+      subtext: `${totalTourRequests} all-time requests`,
     },
     {
       label: "Inquiries",

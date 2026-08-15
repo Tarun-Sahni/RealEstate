@@ -9,7 +9,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { NavMain } from "./nav-main"
-import { Home, LogOut, Loader2, LandPlot, Layers2, Layers, Users, ScrollText } from "lucide-react"
+import { Home, LogOut, Loader2, LandPlot, Layers2, Layers, Users, ScrollText, CalendarClock } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import axios, { AxiosError } from "axios"
@@ -60,6 +60,10 @@ const data = {
       title: "Inquiry",
       url: "/admin/inquiry",
       icon: ScrollText,
+    }, {
+      title: "Tour Requests",
+      url: "/admin/visitbooking",
+      icon: CalendarClock,
     },
   ],
 }
