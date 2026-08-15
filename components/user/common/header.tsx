@@ -36,7 +36,7 @@ export const NAVLINKS = [
     },
     {
         name: "Properties",
-        href: "/",
+        href: "/properties",
     }
 ]
 

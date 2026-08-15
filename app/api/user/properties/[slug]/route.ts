@@ -1,5 +1,4 @@
-import connectDB from "@/lib/database";
-import { Property } from "@/models";
+import { getPropertyBySlug } from "@/lib/queries/properties";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
@@ -12,20 +11,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
             }, { status: 400 })
         }
 
-        await connectDB();
-
-        // Atomic increment avoids a separate read-then-write round trip.
-        const property = await Property.findOneAndUpdate(
-            { slug, isActive: true },
-            { $inc: { views: 1 } },
-            { new: true }
-        )
-            .populate("category", "name slug")
-            .populate("subcategory", "name slug")
-            .populate("listingType", "name")
-            .populate("propertyType", "name")
-            .lean();
-
+        const property = await getPropertyBySlug(slug);
         if (!property) {
             return NextResponse.json({
                 success: false,

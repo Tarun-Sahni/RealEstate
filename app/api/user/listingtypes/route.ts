@@ -1,14 +1,14 @@
-import { getPublicCategories } from "@/lib/queries/properties";
+import { getPublicListingTypes } from "@/lib/queries/properties";
 import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
-        const categories = await getPublicCategories();
+        const listingTypes = await getPublicListingTypes();
 
         return NextResponse.json({
             success: true,
-            message: "Categories fetched successfully.",
-            categories
+            message: "Listing types fetched successfully.",
+            listingTypes
         }, { status: 200 })
     } catch (error) {
         return NextResponse.json({

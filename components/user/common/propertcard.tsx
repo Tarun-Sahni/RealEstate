@@ -236,13 +236,13 @@ const PropertyCard = ({
 
         {(bedrooms || bathrooms || area?.value) && (
           <div className="flex items-center gap-4 border-t border-border pt-3 text-xs text-muted-foreground">
-            {typeof bedrooms === "number" && (
+            {typeof bedrooms === "number" && bedrooms > 0 && (
               <span className="flex items-center gap-1.5">
                 <BedDouble size={14} className="text-yellow-500" />
                 {bedrooms} Bed
               </span>
             )}
-            {typeof bathrooms === "number" && (
+            {typeof bathrooms === "number" && bathrooms > 0 && (
               <span className="flex items-center gap-1.5">
                 <Bath size={14} className="text-yellow-500" />
                 {bathrooms} Bath

@@ -44,7 +44,7 @@ const HeroSection = () => {
             </span>
           </h1>
           <p className="max-w-xs sm:max-w-sm font-inter text-white text-center tracking-widest text-sm md:text-base leading-relaxed">Explore our curated selection of exquisite properties meticulously tailored to your unique dream home vision</p>
-          <Link href="/" className="bg-yellow-500 rounded px-6 sm:px-8 py-2 mt-4">
+          <Link href="/properties" className="bg-yellow-500 rounded px-6 sm:px-8 py-2 mt-4">
             Browse Properties
           </Link>
         </div>

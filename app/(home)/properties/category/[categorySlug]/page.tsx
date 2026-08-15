@@ -1,4 +1,5 @@
 import Link from "next/link"
+import { notFound } from "next/navigation"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,46 +13,61 @@ import PropertyFilters from "@/components/user/property/property-filters"
 import PropertyGrid from "@/components/user/property/property-grid"
 import PropertyPagination from "@/components/user/property/property-pagination"
 import {
-  getAllPublicSubcategories,
   getPublicCategories,
   getPublicListingTypes,
   getPublicProperties,
   getPublicPropertyTypes,
+  getPublicSubcategories,
 } from "@/lib/queries/properties"
-
-export const metadata = {
-  title: "Properties | Gurgaon Elite Estate",
-  description: "Browse apartments, villas, plots and commercial spaces across Gurgaon.",
-}
 
 type SearchParams = Record<string, string | string[] | undefined>
 
 const first = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value)
 
-const PropertiesPage = async ({ searchParams }: { searchParams: Promise<SearchParams> }) => {
-  const params = await searchParams
+export async function generateMetadata({ params }: { params: Promise<{ categorySlug: string }> }) {
+  const { categorySlug } = await params
+  const result = await getPublicSubcategories(categorySlug)
+  if (!result) return { title: "Category Not Found | Gurgaon Elite Estate" }
+
+  return {
+    title: `${result.category.name} Properties | Gurgaon Elite Estate`,
+    description: `Browse ${result.category.name.toLowerCase()} properties for sale and rent in Gurgaon.`,
+  }
+}
+
+const CategoryPage = async ({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ categorySlug: string }>
+  searchParams: Promise<SearchParams>
+}) => {
+  const { categorySlug } = await params
+  const query = await searchParams
+
+  const categoryResult = await getPublicSubcategories(categorySlug)
+  if (!categoryResult) notFound()
+
   const filters = {
-    category: first(params.category),
-    subcategory: first(params.subcategory),
-    listingType: first(params.listingType),
-    propertyType: first(params.propertyType),
-    city: first(params.city),
-    minPrice: first(params.minPrice),
-    maxPrice: first(params.maxPrice),
-    search: first(params.search),
-    page: first(params.page),
+    category: categorySlug,
+    subcategory: first(query.subcategory),
+    listingType: first(query.listingType),
+    propertyType: first(query.propertyType),
+    city: first(query.city),
+    minPrice: first(query.minPrice),
+    maxPrice: first(query.maxPrice),
+    search: first(query.search),
+    page: first(query.page),
   }
 
-  const [{ properties, pagination }, categories, subcategories, listingTypes, propertyTypes] = await Promise.all([
+  const [{ properties, pagination }, categories, listingTypes, propertyTypes] = await Promise.all([
     getPublicProperties(filters),
     getPublicCategories(),
-    getAllPublicSubcategories(),
     getPublicListingTypes(),
     getPublicPropertyTypes(),
   ])
 
   const currentSearchParams: Record<string, string | undefined> = {
-    category: filters.category,
     subcategory: filters.subcategory,
     listingType: filters.listingType,
     propertyType: filters.propertyType,
@@ -73,17 +89,23 @@ const PropertiesPage = async ({ searchParams }: { searchParams: Promise<SearchPa
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Properties</BreadcrumbPage>
+              <BreadcrumbLink asChild>
+                <Link href="/properties">Properties</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{categoryResult.category.name}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
 
         <div className="flex flex-col gap-2">
-          <h1 className="font-playfair text-3xl font-bold md:text-4xl">
-            Explore Properties
+          <h1 className="font-playfair text-3xl font-bold capitalize md:text-4xl">
+            {categoryResult.category.name}
           </h1>
           <p className="text-sm text-muted-foreground md:text-base">
-            {pagination.total} propert{pagination.total === 1 ? "y" : "ies"} available across Gurgaon
+            {pagination.total} propert{pagination.total === 1 ? "y" : "ies"} in {categoryResult.category.name}
           </p>
         </div>
 
@@ -93,9 +115,11 @@ const PropertiesPage = async ({ searchParams }: { searchParams: Promise<SearchPa
           <aside className="lg:w-72 lg:shrink-0">
             <PropertyFilters
               categories={categories}
-              subcategories={subcategories}
+              subcategories={categoryResult.subcategories}
               listingTypes={listingTypes}
               propertyTypes={propertyTypes}
+              showCategory={false}
+              showSubcategory={categoryResult.subcategories.length > 0}
             />
           </aside>
 
@@ -104,7 +128,7 @@ const PropertiesPage = async ({ searchParams }: { searchParams: Promise<SearchPa
             <div className="flex justify-center">
               <PropertyPagination
                 pagination={pagination}
-                basePath="/properties"
+                basePath={`/properties/category/${categorySlug}`}
                 searchParams={currentSearchParams}
               />
             </div>
@@ -115,4 +139,4 @@ const PropertiesPage = async ({ searchParams }: { searchParams: Promise<SearchPa
   )
 }
 
-export default PropertiesPage
+export default CategoryPage
