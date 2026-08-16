@@ -41,7 +41,7 @@ const DeleteCategory = ({ categoryid, onSuccess }: { categoryid: string; onSucce
       <AlertDialogHeader>
         <AlertDialogTitle className="font-inter">Are you absolutely sure?</AlertDialogTitle>
         <AlertDialogDescription>
-          This action cannot be undone. This will permanently delete this category from the server.
+          This action cannot be undone. This will permanently delete this category, along with every subcategory and property under it.
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>

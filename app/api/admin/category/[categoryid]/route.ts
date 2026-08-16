@@ -1,6 +1,6 @@
 import connectDB from "@/lib/database";
 import { getAdminUser } from "@/lib/dal";
-import { Category } from "@/models";
+import { Category, Property, SubCategory } from "@/models";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ categoryid: string }> }) {
@@ -42,6 +42,13 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
             }, { status: 404 })
         }
 
+        // Deactivating a category hides everything under it too. Reactivating it does
+        // NOT auto-reactivate children — admins re-enable those explicitly.
+        if (!category.isActive) {
+            await SubCategory.updateMany({ category: categoryid }, { isActive: false });
+            await Property.updateMany({ category: categoryid }, { isActive: false });
+        }
+
         return NextResponse.json({
             success: true,
             message: "Category updated successfully.",
@@ -80,7 +87,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
             }, { status: 401 })
         }
 
-        const category = await Category.findByIdAndDelete(categoryid);
+        const category = await Category.findById(categoryid);
         if (!category) {
             return NextResponse.json({
                 success: false,
@@ -88,9 +95,14 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
             }, { status: 404 })
         }
 
+        // Cascade: every property and subcategory under this category goes with it.
+        await Property.deleteMany({ category: categoryid });
+        await SubCategory.deleteMany({ category: categoryid });
+        await category.deleteOne();
+
         return NextResponse.json({
             success: true,
-            message: "Category deleted successfully."
+            message: "Category deleted successfully, along with its subcategories and properties."
         }, { status: 200 })
     } catch (error) {
         return NextResponse.json({

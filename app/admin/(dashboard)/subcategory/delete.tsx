@@ -39,7 +39,7 @@ const DeleteSubCategory = ({ subcategoryid, onSuccess }: { subcategoryid: string
       <AlertDialogHeader>
         <AlertDialogTitle className="font-inter">Are you absolutely sure?</AlertDialogTitle>
         <AlertDialogDescription>
-          This action cannot be undone. This will permanently delete this subcategory from the server.
+          This action cannot be undone. This will permanently delete this subcategory, along with every property under it.
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
