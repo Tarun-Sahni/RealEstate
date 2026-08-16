@@ -3,6 +3,7 @@ import { getAdminUser } from "@/lib/dal";
 import { applyPropertyMediaUploads } from "@/lib/property-media";
 import { Property } from "@/models";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ propertyid: string }> }) {
     try {
@@ -100,6 +101,8 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
             }, { status: 404 })
         }
 
+        revalidatePath("/", "layout");
+
         return NextResponse.json({
             success: true,
             message: "Property updated successfully.",
@@ -145,6 +148,8 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
                 message: "Property not found."
             }, { status: 404 })
         }
+
+        revalidatePath("/", "layout");
 
         return NextResponse.json({
             success: true,

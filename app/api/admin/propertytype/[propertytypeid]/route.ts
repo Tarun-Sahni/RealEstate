@@ -2,6 +2,7 @@ import connectDB from "@/lib/database";
 import { getAdminUser } from "@/lib/dal";
 import { PropertyType } from "@/models";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ propertytypeid: string }> }) {
     try {
@@ -42,6 +43,8 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
             }, { status: 404 })
         }
 
+        revalidatePath("/", "layout");
+
         return NextResponse.json({
             success: true,
             message: "Property type updated successfully.",
@@ -81,6 +84,8 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
                 message: "Property type not found."
             }, { status: 404 })
         }
+
+        revalidatePath("/", "layout");
 
         return NextResponse.json({
             success: true,

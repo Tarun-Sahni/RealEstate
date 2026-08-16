@@ -3,6 +3,7 @@ import { getAdminUser } from "@/lib/dal";
 import imagekit from "@/lib/imagekit";
 import { Testimonial } from "@/models";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 const isUploadedFile = (value: FormDataEntryValue | null): value is File =>
     value instanceof File && value.size > 0;
@@ -63,6 +64,8 @@ export async function POST(request: NextRequest) {
             photo,
             photoFileId,
         });
+
+        revalidatePath("/", "layout");
 
         return NextResponse.json({
             success: true,

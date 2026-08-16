@@ -10,6 +10,10 @@ export const metadata = {
   description: "Browse featured and most-viewed apartments, villas, plots and commercial properties in Gurgaon. Verified listings, transparent pricing and expert guidance from Gurgaon Elite Estate.",
 }
 
+// Always render fresh from the database — admin-managed content (properties, testimonials)
+// should never be served from a stale build-time cache.
+export const dynamic = "force-dynamic"
+
 const Home = async () => {
   const [featuredProperties, mostViewedProperties, testimonials] = await Promise.all([
     getFeaturedProperties(8),

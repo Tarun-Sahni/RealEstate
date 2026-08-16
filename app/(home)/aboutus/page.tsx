@@ -15,6 +15,10 @@ export const metadata = {
     description: "Learn about Gurgaon Elite Estate - a trusted real estate agency helping buyers, sellers and investors find apartments, villas, plots and commercial properties across Gurgaon.",
 }
 
+// Always render fresh from the database — admin-managed content (team members)
+// should never be served from a stale build-time cache.
+export const dynamic = "force-dynamic"
+
 const About = async () => {
     const teamMembers = await getTeamMembers();
 

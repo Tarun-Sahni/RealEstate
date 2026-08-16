@@ -24,6 +24,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
+// Always render fresh from the database — admin-managed content (properties)
+// should never be served from a stale build-time cache.
+export const dynamic = "force-dynamic"
+
 const PropertyDetailPage = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params
   const property = await getPropertyBySlug(slug)

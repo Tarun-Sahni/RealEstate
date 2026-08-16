@@ -2,6 +2,7 @@ import connectDB from "@/lib/database";
 import { getAdminUser } from "@/lib/dal";
 import { SiteSettings } from "@/models";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function GET(request: NextRequest) {
     try {
@@ -65,6 +66,8 @@ export async function PATCH(request: NextRequest) {
             { phone, email, supportEmail, officeAddress, mapEmbedUrl, officeHours, whatsappNumber, facebook, youtube, instagram },
             { new: true, upsert: true, runValidators: true }
         );
+
+        revalidatePath("/", "layout");
 
         return NextResponse.json({
             success: true,

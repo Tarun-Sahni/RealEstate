@@ -2,6 +2,7 @@ import connectDB from "@/lib/database";
 import { getAdminUser } from "@/lib/dal";
 import { Property, SubCategory } from "@/models";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ subcategoryid: string }> }) {
     try {
@@ -48,6 +49,8 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
             await Property.updateMany({ subcategory: subcategoryid }, { isActive: false });
         }
 
+        revalidatePath("/", "layout");
+
         return NextResponse.json({
             success: true,
             message: "Subcategory updated successfully.",
@@ -91,6 +94,8 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         // Cascade: every property under this subcategory goes with it.
         await Property.deleteMany({ subcategory: subcategoryid });
         await subcategory.deleteOne();
+
+        revalidatePath("/", "layout");
 
         return NextResponse.json({
             success: true,

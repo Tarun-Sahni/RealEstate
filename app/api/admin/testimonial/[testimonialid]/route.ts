@@ -3,6 +3,7 @@ import { getAdminUser } from "@/lib/dal";
 import imagekit from "@/lib/imagekit";
 import { Testimonial } from "@/models";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 const isUploadedFile = (value: FormDataEntryValue | null): value is File =>
     value instanceof File && value.size > 0;
@@ -96,6 +97,8 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
             await deletePhoto(previousPhotoFileId);
         }
 
+        revalidatePath("/", "layout");
+
         return NextResponse.json({
             success: true,
             message: "Testimonial updated successfully.",
@@ -137,6 +140,8 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         }
 
         await deletePhoto(testimonial.photoFileId);
+
+        revalidatePath("/", "layout");
 
         return NextResponse.json({
             success: true,

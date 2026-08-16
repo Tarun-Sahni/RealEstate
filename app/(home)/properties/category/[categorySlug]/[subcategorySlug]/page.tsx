@@ -40,6 +40,10 @@ export async function generateMetadata({
   }
 }
 
+// Always render fresh from the database — admin-managed content (properties)
+// should never be served from a stale build-time cache.
+export const dynamic = "force-dynamic"
+
 const SubcategoryPage = async ({
   params,
   searchParams,

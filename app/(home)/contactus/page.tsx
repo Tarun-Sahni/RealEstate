@@ -9,6 +9,10 @@ export const metadata = {
   description: "Get in touch with Gurgaon Elite Estate for property enquiries, site visits and expert real estate advice. Call, email or visit our Gurgaon office.",
 }
 
+// Always render fresh from the database — admin-managed content (site settings)
+// should never be served from a stale build-time cache.
+export const dynamic = "force-dynamic"
+
 const DEFAULT_MAP_EMBED_URL = "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d3506.0702478452067!2d77.01455728!3d28.50753414!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390d1954f11df7c5%3A0x90e93daf0ec6634f!2sGURGAON%20ELITE%20ESTATE%20%3A%20Property%20Dealer%20Sector%20110%20Gurgaon!5e0!3m2!1sen!2sin!4v1782041501310!5m2!1sen!2sin"
 
 const ContactUs = async () => {

@@ -3,6 +3,7 @@ import { getAdminUser } from "@/lib/dal";
 import imagekit from "@/lib/imagekit";
 import { TeamMember } from "@/models";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 const isUploadedFile = (value: FormDataEntryValue | null): value is File =>
     value instanceof File && value.size > 0;
@@ -48,6 +49,8 @@ export async function POST(request: NextRequest) {
 
         const { url: photo, fileId: photoFileId } = await uploadPhoto(photoFile);
         const teamMember = await TeamMember.create({ name, designation, photo, photoFileId });
+
+        revalidatePath("/", "layout");
 
         return NextResponse.json({
             success: true,

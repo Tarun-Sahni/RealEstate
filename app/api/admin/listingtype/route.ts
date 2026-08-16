@@ -2,6 +2,7 @@ import connectDB from "@/lib/database";
 import { getAdminUser } from "@/lib/dal";
 import { ListingType } from "@/models";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function POST(request: NextRequest) {
     try {
@@ -26,6 +27,8 @@ export async function POST(request: NextRequest) {
             name,
             isActive,
         });
+
+        revalidatePath("/", "layout");
 
         return NextResponse.json({
             success: true,

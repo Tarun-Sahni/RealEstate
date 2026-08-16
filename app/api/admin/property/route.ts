@@ -3,6 +3,7 @@ import { getAdminUser } from "@/lib/dal";
 import { applyPropertyMediaUploads } from "@/lib/property-media";
 import { Property } from "@/models";
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 export async function POST(request: NextRequest) {
     try {
@@ -37,6 +38,8 @@ export async function POST(request: NextRequest) {
         await applyPropertyMediaUploads(formData, body);
 
         const property = await Property.create(body);
+
+        revalidatePath("/", "layout");
 
         return NextResponse.json({
             success: true,

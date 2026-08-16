@@ -24,6 +24,10 @@ export const metadata = {
   description: "Browse apartments, villas, plots and commercial spaces across Gurgaon.",
 }
 
+// Always render fresh from the database — admin-managed content (properties)
+// should never be served from a stale build-time cache.
+export const dynamic = "force-dynamic"
+
 type SearchParams = Record<string, string | string[] | undefined>
 
 const first = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value)
