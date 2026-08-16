@@ -34,7 +34,7 @@ const HeroSection = () => {
           priority
           className="object-cover absolute top-0 left-0 right-0 bottom-0 group-hover:scale-120 transition-transform duration-20000 ease-linear"
         />
-        <div className="w-full h-full bg-black/40 absolute top-0 left-0 right-0 bottom-0 z-10"></div>
+        <div className="w-full h-full dark:bg-black/40 absolute top-0 left-0 right-0 bottom-0 z-10"></div>
         <div className="flex flex-col gap-4 z-20 items-center px-4 sm:px-6">
           <h1 className="font-playfair text-white text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold capitalize text-center text-wrap tracking-wide leading-tight">
             Discover Your<br />
