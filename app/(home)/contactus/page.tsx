@@ -20,11 +20,11 @@ const ContactUs = async () => {
 
   return (
     <main className="min-h-screen mt-18 max-w-7xl mx-auto py-8 flex flex-col lg:flex-row justify-between px-4">
-      <aside className='h-full border lg:w-1/3 flex flex-col gap-6 p-4 rounded-2xl shadow-xl'>
+      <aside className='h-full border lg:w-1/3 flex flex-col gap-6 p-4 rounded-2xl shadow-xl bg-muted'>
         <Badge variant="default">Contact Us</Badge>
         <h1 className='text-2xl md:text-4xl font-playfair'>Let's find your next home together.</h1>
         <p className='tracking-wider font-inter'>Whether you're buying, selling or just exploring the market, our team is ready to guide you with expert advice and personlized support.</p>
-        <div className='flex flex-row items-center justify-start gap-2 border-2 border-r-yellow-500 border-l-yellow-500 p-4 rounded-xl'>
+        <div className='flex flex-row items-center justify-start gap-2 border-2 border-r-yellow-500 border-l-yellow-500 p-4 rounded-xl bg-white dark:bg-black'>
           <div className='w-12 h-12 bg-yellow-500 rounded-lg flex flex-row justify-center items-center'>
             <Phone />
           </div>
@@ -33,7 +33,7 @@ const ContactUs = async () => {
             <p className='text-xs tracking-wider'>{phone}</p>
           </div>
         </div>
-        <div className='flex flex-row items-center justify-start gap-2 border-2 border-r-yellow-500 border-l-yellow-500 p-4 rounded-xl'>
+        <div className='flex flex-row items-center justify-start gap-2 border-2 border-r-yellow-500 border-l-yellow-500 p-4 rounded-xl bg-white dark:bg-black'>
           <div className='w-12 h-12 bg-yellow-500 rounded-lg flex flex-row justify-center items-center'>
             <Mail />
           </div>
@@ -42,7 +42,7 @@ const ContactUs = async () => {
             <p className='text-xs tracking-wider'>{email}</p>
           </div>
         </div>
-        <div className='flex flex-col items-start justify-start gap-2 border-2 border-r-yellow-500 border-l-yellow-500 p-4 rounded-xl'>
+        <div className='flex flex-col items-start justify-start gap-2 border-2 border-r-yellow-500 border-l-yellow-500 p-4 rounded-xl bg-white dark:bg-black'>
           <div className='flex flex-row justify-center items-start gap-2'>
             <MapPinHouse />
             <p className='font-playfair text-xl'>Visit Us</p>

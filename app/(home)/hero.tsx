@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ArrowUpRight, Lightbulb, ReceiptIndianRupee, Store, Building2 } from "lucide-react"
+import { Lightbulb, ReceiptIndianRupee, Store, Building2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -26,7 +26,7 @@ const features = [
 const HeroSection = () => {
   return (
     <section className="relative w-full flex flex-col">
-      <div className="w-full h-dvh min-h-125 flex flex-col justify-center items-center relative group overflow-hidden mb-2">
+      <div className="w-full h-dvh min-h-125 flex flex-col justify-center items-center relative group overflow-hidden">
         <Image
           src="/hero.png"
           alt="Hero Image"
@@ -44,27 +44,25 @@ const HeroSection = () => {
             </span>
           </h1>
           <p className="max-w-xs sm:max-w-sm font-inter text-white text-center tracking-widest text-sm md:text-base leading-relaxed">Explore our curated selection of exquisite properties meticulously tailored to your unique dream home vision</p>
-          <Link href="/properties" className="bg-yellow-500 rounded px-6 sm:px-8 py-2 mt-4">
+          <Link href="/properties" className="bg-yellow-500 rounded-full px-6 sm:px-8 py-3 mt-4 text-lg tracking-wider">
             Browse Properties
           </Link>
         </div>
       </div>
-      <div className="w-full border-t-4 border-t-slate-500/50 border-b-4 border-b-slate-500/50 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
-        {features.map(({ icon: Icon, title }) => (
-          <div
-            key={title}
-            className="w-full bg-slate-500/20 rounded relative flex flex-col justify-center items-center gap-4 py-8 px-4"
-          >
-            <ArrowUpRight
-              size={20}
-              className="absolute top-4 right-4 text-slate-400"
-            />
-            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-3 border-yellow-500 bg-yellow-500/20 inset-shadow-yellow-500 shadow-md flex justify-center items-center">
-              <Icon size={24} color="#fff" />
+      <div className="w-full border-y bg-muted/40 px-4 py-10 md:py-12">
+        <div className="container mx-auto grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 md:gap-6">
+          {features.map(({ icon: Icon, title }) => (
+            <div
+              key={title}
+              className="flex w-full flex-col items-center gap-4 rounded-2xl border bg-card px-4 py-8 text-center shadow-xs transition-shadow hover:shadow-md"
+            >
+              <div className="flex size-14 shrink-0 items-center justify-center rounded-full border border-yellow-500/50 bg-yellow-500/10">
+                <Icon size={26} className="text-yellow-500" />
+              </div>
+              <p className="font-inter text-sm tracking-wide sm:text-base">{title}</p>
             </div>
-            <p className="tracking-wider text-center text-sm sm:text-base">{title}</p>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   )

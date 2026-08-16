@@ -1,7 +1,9 @@
 import HeroSection from './hero'
 import CtaBanner from './cta-banner'
 import PropertyGrid from '@/components/user/property/property-grid'
+import Testimonials from '@/components/user/home/testimonials'
 import { getFeaturedProperties, getMostViewedProperties } from '@/lib/queries/properties'
+import { getTestimonials } from '@/lib/queries/testimonials'
 
 export const metadata = {
   title: "Buy, Sell & Rent Properties in Gurgaon",
@@ -9,9 +11,10 @@ export const metadata = {
 }
 
 const Home = async () => {
-  const [featuredProperties, mostViewedProperties] = await Promise.all([
+  const [featuredProperties, mostViewedProperties, testimonials] = await Promise.all([
     getFeaturedProperties(8),
     getMostViewedProperties(8),
+    getTestimonials(9),
   ])
 
   return (
@@ -23,7 +26,7 @@ const Home = async () => {
             <h2 className='font-playfair text-3xl md:text-4xl font-bold'>
               Featured Properties
             </h2>
-            <p className='max-w-md text-muted-foreground text-sm md:text-base'>
+            <p className='max-w-sm text-muted-foreground text-sm md:text-base'>
               Handpicked listings curated for their location, value and design
             </p>
           </div>
@@ -37,7 +40,7 @@ const Home = async () => {
             <h2 className='font-playfair text-3xl md:text-4xl font-bold'>
               Most Viewed Properties
             </h2>
-            <p className='max-w-md text-muted-foreground text-sm md:text-base'>
+            <p className='max-w-xs text-muted-foreground text-sm md:text-base'>
               The listings catching the most attention from buyers right now
             </p>
           </div>
@@ -45,6 +48,7 @@ const Home = async () => {
             <PropertyGrid properties={mostViewedProperties} className='lg:grid-cols-4 xl:grid-cols-4' />
           </div>
         </section>
+        <Testimonials testimonials={testimonials} />
       </main>
     </>
   )

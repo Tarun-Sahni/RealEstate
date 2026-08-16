@@ -16,39 +16,39 @@ const Footer = async () => {
   const whatsappHref = settings.whatsappNumber ? `https://wa.me/${settings.whatsappNumber}` : "https://wa.me/919999999999";
 
   return (
-    <footer className='w-full bg-neutral-900 px-4'>
+    <footer className='w-full border-t bg-secondary px-4 text-secondary-foreground'>
       <div className='max-w-7xl mx-auto grid grid-cols-1 gap-10 py-16 sm:grid-cols-2 lg:grid-cols-4'>
         <div className='flex flex-col gap-5 sm:col-span-2 lg:col-span-2'>
           <Logo width={100} height={100} />
-          <p className='max-w-sm text-sm leading-relaxed tracking-wide text-neutral-400'>
+          <p className='max-w-sm text-sm leading-relaxed tracking-wide text-muted-foreground'>
             Your trusted partner in finding exceptional properties. We bring expertise, integrity and personalized service to every step of your real estate journey.
           </p>
           <div className='flex items-center gap-4 pt-1'>
             <Link
               href={facebookHref}
               target="_blank"
-              className="flex size-9 items-center justify-center rounded-full bg-white/5 text-white transition-colors hover:bg-[#1877F2] hover:text-white"
+              className="flex size-9 items-center justify-center rounded-full bg-foreground/5 text-secondary-foreground transition-colors hover:bg-[#1877F2] hover:text-white"
             >
               <FaFacebook className="size-4" />
             </Link>
             <Link
               href={instagramHref}
               target="_blank"
-              className="flex size-9 items-center justify-center rounded-full bg-white/5 text-white transition-colors hover:bg-[#E4405F] hover:text-white"
+              className="flex size-9 items-center justify-center rounded-full bg-foreground/5 text-secondary-foreground transition-colors hover:bg-[#E4405F] hover:text-white"
             >
               <FaInstagram className="size-4" />
             </Link>
             <Link
               href={youtubeHref}
               target="_blank"
-              className="flex size-9 items-center justify-center rounded-full bg-white/5 text-white transition-colors hover:bg-[#FF0000] hover:text-white"
+              className="flex size-9 items-center justify-center rounded-full bg-foreground/5 text-secondary-foreground transition-colors hover:bg-[#FF0000] hover:text-white"
             >
               <FaYoutube className="size-4" />
             </Link>
             <Link
               href={whatsappHref}
               target="_blank"
-              className="flex size-9 items-center justify-center rounded-full bg-white/5 text-white transition-colors hover:bg-[#25D366] hover:text-white"
+              className="flex size-9 items-center justify-center rounded-full bg-foreground/5 text-secondary-foreground transition-colors hover:bg-[#25D366] hover:text-white"
             >
               <FaWhatsapp className="size-4" />
             </Link>
@@ -56,13 +56,13 @@ const Footer = async () => {
         </div>
 
         <div className='flex flex-col gap-4'>
-          <h2 className='font-playfair text-lg tracking-wider text-white'>Quick Links</h2>
+          <h2 className='font-playfair text-lg tracking-wider'>Quick Links</h2>
           <nav className='flex flex-col gap-3'>
             {NAVLINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className='flex items-center gap-2 text-sm tracking-wider text-neutral-300 transition-all hover:translate-x-1 hover:text-yellow-500'
+                className='flex items-center gap-2 text-sm tracking-wider text-muted-foreground transition-all hover:translate-x-1 hover:text-yellow-500'
               >
                 <ArrowRight strokeWidth={2.75} size={14} className='text-yellow-500' />
                 {link.name}
@@ -72,8 +72,8 @@ const Footer = async () => {
         </div>
 
         <div className='flex flex-col gap-4'>
-          <h2 className='font-playfair text-lg tracking-wider text-white'>Contact Us</h2>
-          <ul className='flex flex-col gap-3 text-sm text-neutral-300'>
+          <h2 className='font-playfair text-lg tracking-wider'>Contact Us</h2>
+          <ul className='flex flex-col gap-3 text-sm text-muted-foreground'>
             <li>
               <Link href={`tel: ${phone}`} className='flex items-start gap-2.5 tracking-wider transition-colors hover:text-yellow-500'>
                 <Phone size={15} className='mt-0.5 shrink-0 text-yellow-500' />
@@ -102,8 +102,8 @@ const Footer = async () => {
         </div>
       </div>
       {/* copyright */}
-      <div className='max-w-7xl mx-auto border-t border-t-white/10 py-6 text-center'>
-        <p className='text-xs tracking-wider text-neutral-400 md:text-sm'>
+      <div className='max-w-7xl mx-auto border-t py-6 text-center'>
+        <p className='text-xs tracking-wider text-muted-foreground md:text-sm'>
           &copy;{new Date().getFullYear()} <span className='text-yellow-500'>{BRAND_NAME}</span> - All Rights Reserved
         </p>
       </div>

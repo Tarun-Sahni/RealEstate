@@ -6,6 +6,8 @@ import { ListFilter, Search, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Slider } from "@/components/ui/slider"
+import { formatIndianNumber } from "@/lib/utils"
 import {
   Select,
   SelectContent,
@@ -43,6 +45,9 @@ interface PropertyFiltersProps {
 }
 
 const ALL = "__all__"
+const PRICE_SLIDER_MIN = 0
+const PRICE_SLIDER_MAX = 100000000 // ₹10 Crore
+const PRICE_SLIDER_STEP = 50000
 
 const PropertyFilters = ({
   categories,
@@ -65,6 +70,21 @@ const PropertyFilters = ({
   const [minPrice, setMinPrice] = useState(searchParams.get("minPrice") ?? "")
   const [maxPrice, setMaxPrice] = useState(searchParams.get("maxPrice") ?? "")
   const [sheetOpen, setSheetOpen] = useState(false)
+
+  const priceSliderValue = useMemo(() => {
+    const min = minPrice
+      ? Math.min(Math.max(Number(minPrice), PRICE_SLIDER_MIN), PRICE_SLIDER_MAX)
+      : PRICE_SLIDER_MIN
+    const max = maxPrice
+      ? Math.min(Math.max(Number(maxPrice), PRICE_SLIDER_MIN), PRICE_SLIDER_MAX)
+      : PRICE_SLIDER_MAX
+    return [Math.min(min, max), Math.max(min, max)]
+  }, [minPrice, maxPrice])
+
+  const handlePriceSliderChange = ([min, max]: number[]) => {
+    setMinPrice(min <= PRICE_SLIDER_MIN ? "" : String(min))
+    setMaxPrice(max >= PRICE_SLIDER_MAX ? "" : String(max))
+  }
 
   const filteredSubcategories = useMemo(() => {
     if (!showCategory) return subcategories
@@ -248,22 +268,42 @@ const PropertyFilters = ({
 
       <div className="flex flex-col gap-2">
         <Label>Price Range (₹)</Label>
-        <div className="flex items-center gap-2">
-          <Input
-            type="number"
-            min={0}
-            value={minPrice}
-            onChange={(e) => setMinPrice(e.target.value)}
-            placeholder="Min"
-          />
-          <span className="text-muted-foreground">—</span>
-          <Input
-            type="number"
-            min={0}
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}
-            placeholder="Max"
-          />
+        <div className="flex flex-col gap-4">
+          <div className="px-1">
+            <Slider
+              min={PRICE_SLIDER_MIN}
+              max={PRICE_SLIDER_MAX}
+              step={PRICE_SLIDER_STEP}
+              value={priceSliderValue}
+              onValueChange={handlePriceSliderChange}
+            />
+            <div className="mt-2 flex justify-between text-xs text-muted-foreground">
+              <span>₹{formatIndianNumber(PRICE_SLIDER_MIN)}</span>
+              <span>₹{formatIndianNumber(PRICE_SLIDER_MAX)}+</span>
+            </div>
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="pf-min-price" className="text-xs font-normal text-muted-foreground">Min</Label>
+            <Input
+              id="pf-min-price"
+              type="text"
+              inputMode="numeric"
+              value={formatIndianNumber(minPrice)}
+              onChange={(e) => setMinPrice(e.target.value.replace(/\D/g, ""))}
+              placeholder="Minimum Price"
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label htmlFor="pf-max-price" className="text-xs font-normal text-muted-foreground">Max</Label>
+            <Input
+              id="pf-max-price"
+              type="text"
+              inputMode="numeric"
+              value={formatIndianNumber(maxPrice)}
+              onChange={(e) => setMaxPrice(e.target.value.replace(/\D/g, ""))}
+              placeholder="Maximux Price"
+            />
+          </div>
         </div>
       </div>
     </div>
