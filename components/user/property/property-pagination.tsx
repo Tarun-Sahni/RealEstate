@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/pagination"
 import { cn } from "@/lib/utils"
 import { Pagination as PaginationInfo } from "@/lib/queries/properties"
+import PaginationLinkStatus from "./pagination-link-status"
 
 interface PropertyPaginationProps {
   pagination: PaginationInfo
@@ -57,8 +58,10 @@ const PropertyPagination = ({ pagination, basePath, searchParams }: PropertyPagi
             </span>
           ) : (
             <Link href={hrefFor(page - 1)} className={cn(buttonVariants({ variant: "outline", size: "default" }), "pl-1.5!")}>
-              <ChevronLeftIcon />
-              <span className="hidden sm:block">Previous</span>
+              <PaginationLinkStatus>
+                <ChevronLeftIcon />
+                <span className="hidden sm:block">Previous</span>
+              </PaginationLinkStatus>
             </Link>
           )}
         </PaginationItem>
@@ -77,7 +80,7 @@ const PropertyPagination = ({ pagination, basePath, searchParams }: PropertyPagi
                 aria-current={item === page ? "page" : undefined}
                 className={cn(buttonVariants({ variant: item === page ? "outline" : "ghost", size: "icon" }))}
               >
-                {item}
+                <PaginationLinkStatus>{item}</PaginationLinkStatus>
               </Link>
             </PaginationItem>
           )
@@ -90,8 +93,10 @@ const PropertyPagination = ({ pagination, basePath, searchParams }: PropertyPagi
             </span>
           ) : (
             <Link href={hrefFor(page + 1)} className={cn(buttonVariants({ variant: "outline", size: "default" }), "pr-1.5!")}>
-              <span className="hidden sm:block">Next</span>
-              <ChevronRightIcon />
+              <PaginationLinkStatus>
+                <span className="hidden sm:block">Next</span>
+                <ChevronRightIcon />
+              </PaginationLinkStatus>
             </Link>
           )}
         </PaginationItem>

@@ -1,13 +1,13 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo, useState, useTransition } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { ListFilter, Search, X } from "lucide-react"
+import { ListFilter, Loader2, Search, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
-import { formatIndianNumber } from "@/lib/utils"
+import { cn, formatIndianNumber } from "@/lib/utils"
 import {
   Select,
   SelectContent,
@@ -60,6 +60,7 @@ const PropertyFilters = ({
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const [isPending, startTransition] = useTransition()
 
   const [search, setSearch] = useState(searchParams.get("search") ?? "")
   const [category, setCategory] = useState(searchParams.get("category") ?? ALL)
@@ -118,7 +119,10 @@ const PropertyFilters = ({
   }
 
   const apply = (overrides: Parameters<typeof buildUrl>[0] = {}) => {
-    router.push(buildUrl(overrides))
+    const url = buildUrl(overrides)
+    startTransition(() => {
+      router.push(url)
+    })
     setSheetOpen(false)
   }
 
@@ -146,12 +150,20 @@ const PropertyFilters = ({
     setCity("")
     setMinPrice("")
     setMaxPrice("")
-    router.push(pathname)
+    startTransition(() => {
+      router.push(pathname)
+    })
     setSheetOpen(false)
   }
 
   const fields = (
-    <div className="flex flex-col gap-5">
+    <div
+      aria-busy={isPending}
+      className={cn(
+        "flex flex-col gap-5 transition-opacity duration-200",
+        isPending && "pointer-events-none opacity-60"
+      )}
+    >
       <div className="flex flex-col gap-2">
         <Label htmlFor="pf-search">Search</Label>
         <div className="relative">
@@ -316,7 +328,7 @@ const PropertyFilters = ({
         <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
           <SheetTrigger asChild>
             <Button variant="outline" className="gap-2">
-              <ListFilter size={16} />
+              {isPending ? <Loader2 size={16} className="animate-spin" /> : <ListFilter size={16} />}
               Filters
               {activeCount > 0 && (
                 <span className="flex size-5 items-center justify-center rounded-full bg-yellow-500 text-xs font-semibold text-black">
@@ -337,8 +349,9 @@ const PropertyFilters = ({
                 Clear
               </Button>
               <SheetClose asChild>
-                <Button type="button" className="flex-1" onClick={() => apply()}>
-                  Apply Filters
+                <Button type="button" className="flex-1" onClick={() => apply()} disabled={isPending}>
+                  {isPending && <Loader2 className="animate-spin" />}
+                  {isPending ? "Applying..." : "Apply Filters"}
                 </Button>
               </SheetClose>
             </SheetFooter>
@@ -358,7 +371,10 @@ const PropertyFilters = ({
         className="sticky top-30.25 hidden max-h-[calc(100vh-121px-1.5rem)] flex-col gap-5 overflow-y-auto rounded-2xl bg-card p-5 ring-1 ring-foreground/10 lg:flex"
       >
         <div className="flex items-center justify-between">
-          <h3 className="font-playfair text-lg font-semibold">Filters</h3>
+          <h3 className="flex items-center gap-2 font-playfair text-lg font-semibold">
+            Filters
+            {isPending && <Loader2 size={15} className="animate-spin text-muted-foreground" />}
+          </h3>
           {activeCount > 0 && (
             <Button type="button" variant="ghost" size="sm" onClick={clearAll} className="gap-1 text-muted-foreground">
               <X size={14} />
@@ -367,8 +383,9 @@ const PropertyFilters = ({
           )}
         </div>
         {fields}
-        <Button type="submit" className="mt-1">
-          Apply Filters
+        <Button type="submit" className="mt-1" disabled={isPending}>
+          {isPending && <Loader2 className="animate-spin" />}
+          {isPending ? "Applying..." : "Apply Filters"}
         </Button>
       </form>
     </>
