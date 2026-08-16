@@ -148,6 +148,10 @@
   scrollbar-color: color-mix(in oklch, var(--color-yellow-500, #eab308) 55%, transparent) transparent;
 }
 
+button {
+   cursor: pointer;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
